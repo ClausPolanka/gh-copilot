@@ -3,9 +3,9 @@ import java.io.*
 fun main(args: Array<String> = emptyArray()) {
     val userInputListener = WordCounterApplication(
         textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
-            wordsListener = HyphenRemover(
-                wordsListener = PunctuationRemover(
-                    FileSystemStopWordsRemover(
+            wordsListener = HyphenSanatizer(
+                wordsListener = PunctuationSanatizer(
+                    wordsListener = FileSystemStopWordsSanatizer(
                         wordsListener = LatinAlphabeticWordCounter(
                             wordCountListener = ConsoleWordCountListener(),
                         )
@@ -86,7 +86,7 @@ class WhiteSpacesSeparatedWordsAnalyser(
     }
 }
 
-class PunctuationRemover(
+class PunctuationSanatizer(
     private val wordsListener: WordsListener,
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
@@ -95,7 +95,7 @@ class PunctuationRemover(
     }
 }
 
-class HyphenRemover(
+class HyphenSanatizer(
     private val wordsListener: WordsListener,
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
@@ -107,7 +107,7 @@ class HyphenRemover(
     }
 }
 
-class FileSystemStopWordsRemover(
+class FileSystemStopWordsSanatizer(
     private val wordsListener: WordsListener,
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
