@@ -1,24 +1,38 @@
 import java.io.*
 
-fun main() {
-    val userInputSource = ConsoleUserInputSource(
-        userInputListener = WordCounterApplication(
-            textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
-                wordsListener = FileSystemStopWordsRemover(
-                    wordsListener = LatinAlphabeticWordCounter(
-                        wordCountListener = ConsoleWordCountListener(),
-                    )
-                ),
+fun main(args: Array<String> = emptyArray()) {
+    val userInputListener = WordCounterApplication(
+        textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
+            wordsListener = FileSystemStopWordsRemover(
+                wordsListener = LatinAlphabeticWordCounter(
+                    wordCountListener = ConsoleWordCountListener(),
+                )
             ),
-        )
+        ),
     )
+    val userInputSource = UserInputSources(userInputListener).get(args)
     userInputSource.readUserInput()
 }
 
-class ConsoleUserInputSource(
-    val userInputListener: UserInputListener,
+class UserInputSources(
+    private val userInputListener: UserInputListener,
 ) {
-    fun readUserInput() {
+    fun get(args: Array<String>): UserInputSource {
+        if (args.isNotEmpty()) {
+            return FileUserInputSource(userInputListener, args[0])
+        }
+        return ConsoleUserInputSource(userInputListener)
+    }
+}
+
+interface UserInputSource {
+    fun readUserInput()
+}
+
+class ConsoleUserInputSource(
+    private val userInputListener: UserInputListener,
+) : UserInputSource {
+    override fun readUserInput() {
         print("Please enter text: ")
         val userInput = readUserInputFromConsole() ?: return
         userInputListener.onUserInputRead(userInput)
@@ -30,6 +44,16 @@ class ConsoleUserInputSource(
             println("Something went wrong. Please try again.")
             null
         }
+    }
+}
+
+class FileUserInputSource(
+    private val userInputListener: UserInputListener,
+    private val file: String,
+) : UserInputSource {
+    override fun readUserInput() {
+        val userInput = File(file).readLines().joinToString(separator = " ")
+        userInputListener.onUserInputRead(userInput)
     }
 }
 

@@ -13,6 +13,12 @@ class EndToEndTests {
     }
 
     @Test
+    fun `a user provides a file as a user input source`() {
+        main(arrayOf("my_text.txt"))
+        assertThat(uiOutput(), containsString("The text contains 4 word(s)."))
+    }
+
+    @Test
     fun `a user enters a word containing numbers`() {
         aUserEnters("Ma3ry")
         main()
