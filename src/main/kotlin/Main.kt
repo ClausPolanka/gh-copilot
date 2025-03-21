@@ -130,18 +130,20 @@ class LatinAlphabeticWordCounter(
     private val wordCountListener: WordCountListener,
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
-        val wordCount = words.count { w -> w.all { c -> c.isLetter() } }
-        wordCountListener.onWordsCounted(wordCount)
+        val latinAlphabetWords = words.filter { w -> w.all { c -> c.isLetter() } }
+        val wordCount = latinAlphabetWords.count()
+        val uniqueWordCount = latinAlphabetWords.toSet().count()
+        wordCountListener.onWordsCounted(wordCount, uniqueWordCount)
     }
 }
 
 interface WordCountListener {
-    fun onWordsCounted(wordCount: Int)
+    fun onWordsCounted(wordCount: Int, uniqueWordCount: Int)
 }
 
 class ConsoleWordCountListener : WordCountListener {
-    override fun onWordsCounted(wordCount: Int) {
-        println("The text contains $wordCount word(s).")
+    override fun onWordsCounted(wordCount: Int, uniqueWordCount: Int) {
+        println("The text contains $wordCount word(s), $uniqueWordCount of them unique.")
     }
 }
 
