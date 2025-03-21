@@ -16,14 +16,6 @@ fun main(args: Array<String> = emptyArray()) {
     userInputSource.readUserInput()
 }
 
-class WordsAnalyser(
-    private val wordsAnalyser: List<TextAnalyser>,
-) : TextAnalyser {
-    override fun analyse(text: String) {
-        wordsAnalyser.forEach { it.analyse(text) }
-    }
-}
-
 class UserInputSources(
     private val userInputListener: UserInputListener,
 ) {
@@ -88,15 +80,6 @@ class WhiteSpacesSeparatedWordsAnalyser(
 ) : TextAnalyser {
     override fun analyse(text: String) {
         val words = text.split("\\s+".toRegex()).filter { it.isNotBlank() }
-        wordsListener.onWordsAnalysed(words)
-    }
-}
-
-class HyphenSeparatedWordsAnalyser(
-    private val wordsListener: WordsListener,
-) : TextAnalyser {
-    override fun analyse(text: String) {
-        val words = text.split("-".toRegex()).filter { it.isNotBlank() }
         wordsListener.onWordsAnalysed(words)
     }
 }

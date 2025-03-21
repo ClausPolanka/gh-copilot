@@ -7,7 +7,7 @@ import java.lang.System.*
 class EndToEndTests {
     @Test
     fun `a user enters text containing latin alphabetic words while ignoring stop words`() {
-        aUserEnters("Humpty-Dumpty sat on a wall. Humpty-Dumpty had a great fall.")
+        aUserEnters("Humpty Dumpty sat on a wall. Humpty Dumpty had a great fall.")
         main()
         assertThat(uiOutput(), containsString("The text contains 9 word(s)."))
     }
