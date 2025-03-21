@@ -1,0 +1,62 @@
+import org.hamcrest.CoreMatchers.*
+import org.hamcrest.MatcherAssert.*
+import org.junit.*
+import java.io.*
+import java.lang.System.*
+
+class EndToEndTests {
+    @Test
+    fun `a user enters text containing latin alphabetic words`() {
+        aUserEnters("Mary had a little lamb")
+        main()
+        assertThat(uiOutput(), containsString("The text contains 5 word(s)."))
+    }
+
+    @Test
+    fun `a user enters a word containing numbers`() {
+        aUserEnters("Ma3ry")
+        main()
+        assertThat(uiOutput(), containsString("The text contains 0 word(s)."))
+    }
+
+    @Test
+    fun `a user enters a word ending with a punctuation mark`() {
+        aUserEnters("Mary?")
+        main()
+        assertThat(uiOutput(), containsString("The text contains 0 word(s)."))
+    }
+
+    @Test
+    fun `a user enters a blank text`() {
+        aUserEnters("    ")
+        main()
+        assertThat(uiOutput(), containsString("The text contains 0 word(s)."))
+    }
+
+    @Test
+    fun `a user enters nothing and then presses enter`() {
+        aUserEnters("")
+        main()
+        assertThat(uiOutput(), containsString("The text contains 0 word(s)."))
+    }
+
+    private fun uiOutput() = outputStream.toString().trim()
+
+    @Before
+    fun setUp() {
+        setOut(PrintStream(outputStream))
+    }
+
+    @After
+    fun tearDown() {
+        setOut(out)
+        setIn(`in`)
+    }
+
+    private var outputStream = ByteArrayOutputStream()
+    private lateinit var inputStream: ByteArrayInputStream
+    private fun aUserEnters(userInput: String) {
+        inputStream = ByteArrayInputStream("$userInput${lineSeparator()}".toByteArray())
+        setIn(inputStream)
+    }
+}
