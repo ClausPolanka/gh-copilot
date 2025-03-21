@@ -7,9 +7,9 @@ import java.lang.System.*
 class EndToEndTests {
     @Test
     fun `a user enters text containing latin alphabetic words while ignoring stop words`() {
-        aUserEnters("Mary had a little lamb")
+        aUserEnters("Humpty-Dumpty sat on a wall. Humpty-Dumpty had a great fall.")
         main()
-        assertThat(uiOutput(), containsString("The text contains 4 word(s)."))
+        assertThat(uiOutput(), containsString("The text contains 9 word(s)."))
     }
 
     @Test
@@ -29,7 +29,7 @@ class EndToEndTests {
     fun `a user enters a word ending with a punctuation mark`() {
         aUserEnters("Mary?")
         main()
-        assertThat(uiOutput(), containsString("The text contains 0 word(s)."))
+        assertThat(uiOutput(), containsString("The text contains 1 word(s)."))
     }
 
     @Test

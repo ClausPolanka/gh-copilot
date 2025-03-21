@@ -3,15 +3,25 @@ import java.io.*
 fun main(args: Array<String> = emptyArray()) {
     val userInputListener = WordCounterApplication(
         textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
-            wordsListener = FileSystemStopWordsRemover(
-                wordsListener = LatinAlphabeticWordCounter(
-                    wordCountListener = ConsoleWordCountListener(),
-                )
+            wordsListener = PunctuationRemover(
+                FileSystemStopWordsRemover(
+                    wordsListener = LatinAlphabeticWordCounter(
+                        wordCountListener = ConsoleWordCountListener(),
+                    )
+                ),
             ),
         ),
     )
     val userInputSource = UserInputSources(userInputListener).get(args)
     userInputSource.readUserInput()
+}
+
+class WordsAnalyser(
+    private val wordsAnalyser: List<TextAnalyser>,
+) : TextAnalyser {
+    override fun analyse(text: String) {
+        wordsAnalyser.forEach { it.analyse(text) }
+    }
 }
 
 class UserInputSources(
@@ -79,6 +89,24 @@ class WhiteSpacesSeparatedWordsAnalyser(
     override fun analyse(text: String) {
         val words = text.split("\\s+".toRegex()).filter { it.isNotBlank() }
         wordsListener.onWordsAnalysed(words)
+    }
+}
+
+class HyphenSeparatedWordsAnalyser(
+    private val wordsListener: WordsListener,
+) : TextAnalyser {
+    override fun analyse(text: String) {
+        val words = text.split("-".toRegex()).filter { it.isNotBlank() }
+        wordsListener.onWordsAnalysed(words)
+    }
+}
+
+class PunctuationRemover(
+    private val wordsListener: WordsListener,
+) : WordsListener {
+    override fun onWordsAnalysed(words: List<String>) {
+        val wordsWithoutPunctuation = words.map { word -> word.replace("[,;!?.]".toRegex(), "") }
+        wordsListener.onWordsAnalysed(wordsWithoutPunctuation)
     }
 }
 
