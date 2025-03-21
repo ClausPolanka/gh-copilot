@@ -3,13 +3,15 @@ import java.io.*
 fun main(args: Array<String> = emptyArray()) {
     val userInputListener = WordCounterApplication(
         textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
-            wordsListener = PunctuationRemover(
-                FileSystemStopWordsRemover(
-                    wordsListener = LatinAlphabeticWordCounter(
-                        wordCountListener = ConsoleWordCountListener(),
-                    )
+            wordsListener = HyphenRemover(
+                wordsListener = PunctuationRemover(
+                    FileSystemStopWordsRemover(
+                        wordsListener = LatinAlphabeticWordCounter(
+                            wordCountListener = ConsoleWordCountListener(),
+                        )
+                    ),
                 ),
-            ),
+            )
         ),
     )
     val userInputSource = UserInputSources(userInputListener).get(args)
@@ -90,6 +92,18 @@ class PunctuationRemover(
     override fun onWordsAnalysed(words: List<String>) {
         val wordsWithoutPunctuation = words.map { word -> word.replace("[,;!?.]".toRegex(), "") }
         wordsListener.onWordsAnalysed(wordsWithoutPunctuation)
+    }
+}
+
+class HyphenRemover(
+    private val wordsListener: WordsListener,
+) : WordsListener {
+    override fun onWordsAnalysed(words: List<String>) {
+        val wordsWithoutHyphen =
+            words.map { word -> word.replace("-".toRegex(), " ").split(" ") }
+                .flatten()
+                .filter { it.isNotBlank() }
+        wordsListener.onWordsAnalysed(wordsWithoutHyphen)
     }
 }
 
