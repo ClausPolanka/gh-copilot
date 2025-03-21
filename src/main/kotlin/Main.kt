@@ -100,9 +100,14 @@ class HyphenSanatizer(
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
         val wordsWithoutHyphen =
-            words.map { word -> word.replace("-".toRegex(), " ").split(" ") }
+            words
+                .asSequence()
+                .filter { word -> word.startsWith("-").not() }
+                .filter { word -> word.endsWith("-").not() }
+                .map { word -> word.replace("-".toRegex(), " ").split(" ") }
                 .flatten()
                 .filter { it.isNotBlank() }
+                .toList()
         wordsListener.onWordsAnalysed(wordsWithoutHyphen)
     }
 }
