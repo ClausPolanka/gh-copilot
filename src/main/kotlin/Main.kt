@@ -1,27 +1,81 @@
 fun main() {
-    print("Please enter text: ")
-    val userInput = readUserInput() ?: return
-    val wordCount = countLatinAlphabeticWords(userInput)
-    println("The text contains $wordCount word(s).")
+    val userInputSource = ConsoleUserInputSource(
+        userInputListener = WordCounterApplication(
+            textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
+                wordsListener = LatinAlphabeticWordCounter(
+                    wordCountListener = ConsoleWordCountListener(),
+                ),
+            ),
+        )
+    )
+    userInputSource.readUserInput()
 }
 
-fun readUserInput(): String? {
-    return readlnOrNull() ?: run {
-        println()
-        println("Something went wrong. Please try again.")
-        null
+class ConsoleUserInputSource(
+    val userInputListener: UserInputListener,
+) {
+    fun readUserInput() {
+        print("Please enter text: ")
+        val userInput = readUserInputFromConsole() ?: return
+        userInputListener.onUserInputRead(userInput)
+    }
+
+    private fun readUserInputFromConsole(): String? {
+        return readlnOrNull() ?: run {
+            println()
+            println("Something went wrong. Please try again.")
+            null
+        }
     }
 }
 
-fun countLatinAlphabeticWords(userInput: String): Int {
-    return userInput
-        .takeUnless { it.isBlank() }
-        ?.split("\\s+".toRegex())
-        ?.filter(String::isNotBlank)
-        ?.count(::isLatinAlphabeticWord)
-        ?: 0
+interface UserInputListener {
+    fun onUserInputRead(userInput: String)
 }
 
-fun isLatinAlphabeticWord(word: String): Boolean {
-    return word.all { it.isLetter() }
+class WordCounterApplication(
+    private val textAnalyser: TextAnalyser,
+) : UserInputListener {
+    override fun onUserInputRead(userInput: String) {
+        textAnalyser.analyse(text = userInput)
+    }
 }
+
+interface TextAnalyser {
+    fun analyse(text: String)
+}
+
+class WhiteSpacesSeparatedWordsAnalyser(
+    private val wordsListener: WordsListener,
+) : TextAnalyser {
+    override fun analyse(text: String) {
+        val words = text.split("\\s+".toRegex()).filter { it.isNotBlank() }
+        wordsListener.onWordsAnalysed(words)
+    }
+}
+
+interface WordsListener {
+    fun onWordsAnalysed(words: List<String>)
+}
+
+class LatinAlphabeticWordCounter(
+    private val wordCountListener: WordCountListener,
+) : WordsListener {
+    override fun onWordsAnalysed(words: List<String>) {
+        val wordCount = words.count { w -> w.all { c -> c.isLetter() } }
+        wordCountListener.onWordsCounted(wordCount)
+    }
+}
+
+interface WordCountListener {
+    fun onWordsCounted(wordCount: Int)
+}
+
+class ConsoleWordCountListener : WordCountListener {
+    override fun onWordsCounted(wordCount: Int) {
+        println("The text contains $wordCount word(s).")
+    }
+}
+
+
+
