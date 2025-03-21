@@ -1,9 +1,13 @@
+import java.io.*
+
 fun main() {
     val userInputSource = ConsoleUserInputSource(
         userInputListener = WordCounterApplication(
             textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
-                wordsListener = LatinAlphabeticWordCounter(
-                    wordCountListener = ConsoleWordCountListener(),
+                wordsListener = FileSystemStopWordsRemover(
+                    wordsListener = LatinAlphabeticWordCounter(
+                        wordCountListener = ConsoleWordCountListener(),
+                    )
                 ),
             ),
         )
@@ -51,6 +55,16 @@ class WhiteSpacesSeparatedWordsAnalyser(
     override fun analyse(text: String) {
         val words = text.split("\\s+".toRegex()).filter { it.isNotBlank() }
         wordsListener.onWordsAnalysed(words)
+    }
+}
+
+class FileSystemStopWordsRemover(
+    private val wordsListener: WordsListener,
+) : WordsListener {
+    override fun onWordsAnalysed(words: List<String>) {
+        val stopWords = File("stop_words.txt").readLines()
+        val withoutStopWords = words.filter { it !in stopWords }
+        wordsListener.onWordsAnalysed(withoutStopWords)
     }
 }
 

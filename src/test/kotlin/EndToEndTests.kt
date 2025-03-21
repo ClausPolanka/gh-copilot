@@ -6,10 +6,10 @@ import java.lang.System.*
 
 class EndToEndTests {
     @Test
-    fun `a user enters text containing latin alphabetic words`() {
+    fun `a user enters text containing latin alphabetic words while ignoring stop words`() {
         aUserEnters("Mary had a little lamb")
         main()
-        assertThat(uiOutput(), containsString("The text contains 5 word(s)."))
+        assertThat(uiOutput(), containsString("The text contains 4 word(s)."))
     }
 
     @Test
