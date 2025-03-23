@@ -15,17 +15,29 @@ fun main(args: Array<String> = emptyArray()) {
         ),
     )
     val userInputSource = UserInputSources(
-        userInputListener = wordCounterApplication
+        userInputListener = wordCounterApplication,
+        ::println,
     ).get(args)
-    userInputSource.readUserInput()
+    userInputSource?.readUserInput()
 }
 
 class UserInputSources(
     private val userInputListener: UserInputListener,
+    private val errorReporter: ErrorReporter,
 ) {
-    fun get(args: Array<String>): UserInputSource {
+    fun get(args: Array<String>): UserInputSource? {
         if (args.isNotEmpty()) {
-            return FileUserInputSource(userInputListener, args[0])
+            val fileUserInputSource = try {
+                FileUserInputSource(
+                    userInputListener,
+                    errorReporter,
+                    filePath = args[0]
+                )
+            } catch (e: Exception) {
+                errorReporter.report("Error creating FileUserInputSource: ${e.message}")
+                return null
+            }
+            return fileUserInputSource
         }
         return ConsoleUserInputSource(userInputListener)
     }
@@ -55,15 +67,31 @@ class ConsoleUserInputSource(
 
 class FileUserInputSource(
     private val userInputListener: UserInputListener,
-    private val file: String,
+    private val errorReporter: ErrorReporter,
+    filePath: String,
 ) : UserInputSource {
+    private val file = File(filePath)
+
+    init {
+        require(file.isFile) { "File $file is not a file." }
+    }
+
     override fun readUserInput() {
-        val userInput = File(file).readLines().joinToString(separator = " ")
+        val userInput = try {
+            file.readLines(Charsets.UTF_8).joinToString(separator = " ")
+        } catch (e: IOException) {
+            errorReporter.report("Error reading file $file: ${e.message}")
+            return
+        }
         userInputListener.onUserInputRead(userInput)
     }
 }
 
-interface UserInputListener {
+fun interface ErrorReporter {
+    fun report(errorMessage: String)
+}
+
+fun interface UserInputListener {
     fun onUserInputRead(userInput: String)
 }
 
