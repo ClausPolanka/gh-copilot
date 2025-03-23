@@ -195,7 +195,7 @@ class LatinAlphabeticWordCounter(
 }
 
 interface WordCountListener {
-    fun onWordsCounted(wordCount: Int, uniqueWordCount: Int, averageWordLength: Double = 0.0)
+    fun onWordsCounted(wordCount: Int, uniqueWordCount: Int, averageWordLength: Double)
 }
 
 class ConsoleWordCountListener : WordCountListener {
