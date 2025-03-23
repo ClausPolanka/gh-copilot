@@ -178,16 +178,28 @@ class LatinAlphabeticWordCounter(
         val latinAlphabetWords = words.filter { w -> w.all { c -> c.isLetter() } }
         val wordCount = latinAlphabetWords.count()
         val uniqueWordCount = latinAlphabetWords.toSet().count()
-        wordCountListener.onWordsCounted(wordCount, uniqueWordCount)
+        val averageWordLength = latinAlphabetWords.averageWordLength()
+        wordCountListener.onWordsCounted(wordCount, uniqueWordCount, averageWordLength)
     }
+
+    private fun List<String>.averageWordLength() =
+        if (isNotEmpty()) {
+            sumOf { it.length }.toDouble() / count()
+        } else {
+            0.0
+        }
 }
 
 interface WordCountListener {
-    fun onWordsCounted(wordCount: Int, uniqueWordCount: Int)
+    fun onWordsCounted(wordCount: Int, uniqueWordCount: Int, averageWordLength: Double = 0.0)
 }
 
 class ConsoleWordCountListener : WordCountListener {
-    override fun onWordsCounted(wordCount: Int, uniqueWordCount: Int) {
-        println("The text contains $wordCount word(s), $uniqueWordCount of them unique.")
+    override fun onWordsCounted(wordCount: Int, uniqueWordCount: Int, averageWordLength: Double) {
+        println(
+            "The text contains $wordCount word(s), " +
+                "$uniqueWordCount of them unique. " +
+                "The average word length is ${"%.2f".format(averageWordLength)} characters long."
+        )
     }
 }
