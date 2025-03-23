@@ -5,7 +5,7 @@ fun main(args: Array<String> = emptyArray()) {
         textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
             wordsListener = HyphenSanitizer(
                 wordsListener = PunctuationSanitizer(
-                    wordsListener = StopWordsFileSanitizer(
+                    wordsListener = FileSystemStopWordsFilter(
                         wordsListener = LatinAlphabeticWordCounter(
                             wordCountListener = ConsoleWordCountListener(),
                         ),
@@ -149,7 +149,7 @@ class HyphenSanitizer(
     }
 }
 
-class StopWordsFileSanitizer(
+class FileSystemStopWordsFilter(
     private val wordsListener: WordsListener,
     private val errorReporter: ErrorReporter,
 ) : WordsListener {
