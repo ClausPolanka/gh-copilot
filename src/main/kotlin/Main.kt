@@ -28,19 +28,23 @@ class UserInputSources(
 ) {
     fun get(args: Array<String>): UserInputSource? {
         if (args.isNotEmpty()) {
-            val fileUserInputSource = try {
-                FileUserInputSource(
-                    userInputListener,
-                    errorReporter,
-                    filePath = args[0]
-                )
-            } catch (e: Exception) {
-                errorReporter.report("Error creating FileUserInputSource: ${e.message}")
-                return null
-            }
-            return fileUserInputSource
+            return createFileInputSource(args)
         }
         return ConsoleUserInputSource(userInputListener)
+    }
+
+    private fun createFileInputSource(args: Array<String>): FileUserInputSource? {
+        val fileUserInputSource = try {
+            FileUserInputSource(
+                userInputListener,
+                errorReporter,
+                filePath = args[0]
+            )
+        } catch (e: Exception) {
+            errorReporter.report("Error creating FileUserInputSource: ${e.message}")
+            return null
+        }
+        return fileUserInputSource
     }
 }
 
