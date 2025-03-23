@@ -1,7 +1,7 @@
 import java.io.*
 
 fun main(args: Array<String> = emptyArray()) {
-    val userInputListener = WordCounterApplication(
+    val wordCounterApplication = WordCounterApplication(
         textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
             wordsListener = HyphenSanatizer(
                 wordsListener = PunctuationSanatizer(
@@ -14,7 +14,9 @@ fun main(args: Array<String> = emptyArray()) {
             )
         ),
     )
-    val userInputSource = UserInputSources(userInputListener).get(args)
+    val userInputSource = UserInputSources(
+        userInputListener = wordCounterApplication
+    ).get(args)
     userInputSource.readUserInput()
 }
 
