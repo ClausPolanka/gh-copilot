@@ -101,15 +101,14 @@ class HyphenSanatizer(
     private val wordsListener: WordsListener,
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
-        val wordsWithoutHyphen =
-            words
-                .asSequence()
-                .filter { word -> word.startsWith("-").not() }
-                .filter { word -> word.endsWith("-").not() }
-                .map { word -> word.replace("-".toRegex(), " ").split(" ") }
-                .flatten()
-                .filter { it.isNotBlank() }
-                .toList()
+        val wordsWithoutHyphen = words
+            .asSequence()
+            .filter { word -> word.startsWith("-").not() }
+            .filter { word -> word.endsWith("-").not() }
+            .map { word -> word.replace("-".toRegex(), " ").split(" ") }
+            .flatten()
+            .filter { it.isNotBlank() }
+            .toList()
         wordsListener.onWordsAnalysed(wordsWithoutHyphen)
     }
 }
@@ -148,6 +147,3 @@ class ConsoleWordCountListener : WordCountListener {
         println("The text contains $wordCount word(s), $uniqueWordCount of them unique.")
     }
 }
-
-
-
