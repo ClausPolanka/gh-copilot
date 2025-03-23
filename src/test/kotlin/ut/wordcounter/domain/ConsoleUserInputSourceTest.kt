@@ -2,8 +2,7 @@ package ut.wordcounter.domain
 
 import ConsoleUserInputSource
 import UserInputListener
-import org.junit.*
-import org.junit.Assert.*
+import kotlin.test.*
 
 class ConsoleUserInputSourceTest {
     @Test
@@ -17,6 +16,6 @@ class ConsoleUserInputSourceTest {
             }
         )
         sut.readUserInput()
-        assertNull("user input", actual)
+        assertNull(actual, "user input")
     }
 }
