@@ -11,7 +11,7 @@ class EndToEndTests {
     fun `a user enters text containing latin alphabetic words while ignoring stop words`() {
         aUserEnters("Humpty-Dumpty sat on a wall. Humpty-Dumpty had a great fall.")
         main()
-        assertThat(uiOutput(), containsString("The text contains 9 word(s), 7 of them unique."))
+        assertThat(uiOutput(), containsString("The text contains 7 word(s), 6 of them unique."))
     }
 
     @Test
@@ -44,6 +44,13 @@ class EndToEndTests {
     @Test
     fun `a user enters nothing and then presses enter`() {
         aUserEnters("")
+        main()
+        assertThat(uiOutput(), containsString("The text contains 0 word(s), 0 of them unique."))
+    }
+
+    @Test
+    fun `a user enters only stop words`() {
+        aUserEnters("a on the off")
         main()
         assertThat(uiOutput(), containsString("The text contains 0 word(s), 0 of them unique."))
     }

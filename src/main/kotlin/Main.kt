@@ -105,7 +105,7 @@ class HyphenSanatizer(
             .asSequence()
             .filter { word -> word.startsWith("-").not() }
             .filter { word -> word.endsWith("-").not() }
-            .map { word -> word.replace("-".toRegex(), " ").split(" ") }
+            .map { word -> word.replace("-".toRegex(), "").split(" ") }
             .flatten()
             .filter { it.isNotBlank() }
             .toList()

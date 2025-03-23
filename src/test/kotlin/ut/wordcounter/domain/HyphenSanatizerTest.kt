@@ -27,23 +27,23 @@ class HyphenSanatizerTest {
     }
 
     @Test
-    fun `hyphen in the middle of a word splits it into parts`() {
+    fun `hyphen in the middle of a word is removed`() {
         val wordsListener = WordsListenerMock()
         val sut = HyphenSanatizer(wordsListener)
 
         sut.onWordsAnalysed(words = listOf("word-word"))
 
-        assertEquals(listOf("word", "word"), wordsListener.receivedWords)
+        assertEquals(listOf("wordword"), wordsListener.receivedWords)
     }
 
     @Test
-    fun `multiple hyphens in a word split it into multiple parts`() {
+    fun `multiple hyphens in a word are removed`() {
         val wordsListener = WordsListenerMock()
         val sut = HyphenSanatizer(wordsListener)
 
         sut.onWordsAnalysed(words = listOf("word-word-word"))
 
-        assertEquals(listOf("word", "word", "word"), wordsListener.receivedWords)
+        assertEquals(listOf("wordwordword"), wordsListener.receivedWords)
     }
 
     @Test
