@@ -1,7 +1,7 @@
 package ut.wordcounter.domain
 
-import WhiteSpacesSeparatedWordsAnalyser
-import WordsListener
+import wordcounter.domain.textanalysing.impl.*
+import wordcounter.domain.words.*
 import kotlin.test.*
 
 class WhiteSpacesSeparatedWordsAnalyserTest {

@@ -1,10 +1,10 @@
 package it.wordcounter.io
 
-import FileUserInputSource
-import UserInputListener
 import org.junit.jupiter.api.*
 import org.junit.jupiter.api.Test
 import org.junit.jupiter.api.io.*
+import wordcounter.domain.userinput.api.*
+import wordcounter.io.userinput.impl.source.impl.*
 import java.io.*
 import kotlin.test.*
 

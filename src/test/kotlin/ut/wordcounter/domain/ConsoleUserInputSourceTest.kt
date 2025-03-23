@@ -1,7 +1,7 @@
 package ut.wordcounter.domain
 
-import ConsoleUserInputSource
-import UserInputListener
+import wordcounter.domain.userinput.api.*
+import wordcounter.io.userinput.impl.source.impl.*
 import kotlin.test.*
 
 class ConsoleUserInputSourceTest {

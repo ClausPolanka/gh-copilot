@@ -1,7 +1,7 @@
 package it.wordcounter
 
-import main
 import org.junit.jupiter.api.*
+import wordcounter.*
 import java.io.*
 import kotlin.test.*
 import kotlin.test.Test

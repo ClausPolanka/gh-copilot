@@ -1,7 +1,7 @@
 package ut.wordcounter.domain
 
-import HyphenSanitizer
-import WordsListener
+import wordcounter.domain.words.*
+import wordcounter.domain.wordssanitizing.*
 import kotlin.test.*
 
 class HyphenSanitizerTest {
