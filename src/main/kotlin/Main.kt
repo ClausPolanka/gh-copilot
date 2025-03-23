@@ -100,16 +100,19 @@ class PunctuationSanitizer(
 class HyphenSanitizer(
     private val wordsListener: WordsListener,
 ) : WordsListener {
+    companion object {
+        private const val HYPHEN = "-"
+    }
+
     override fun onWordsAnalysed(words: List<String>) {
-        val wordsWithoutHyphen = words
+        val sanitizedWords = words
             .asSequence()
-            .filter { word -> word.startsWith("-").not() }
-            .filter { word -> word.endsWith("-").not() }
-            .map { word -> word.replace("-".toRegex(), "").split(" ") }
-            .flatten()
+            .filterNot { it.startsWith(HYPHEN) || it.endsWith(HYPHEN) }
+            .map { it.replace(HYPHEN, "") }
             .filter { it.isNotBlank() }
             .toList()
-        wordsListener.onWordsAnalysed(wordsWithoutHyphen)
+
+        wordsListener.onWordsAnalysed(sanitizedWords)
     }
 }
 
