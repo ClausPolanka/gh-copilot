@@ -5,10 +5,11 @@ fun main(args: Array<String> = emptyArray()) {
         textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
             wordsListener = HyphenSanitizer(
                 wordsListener = PunctuationSanitizer(
-                    wordsListener = FileSystemStopWordsSanitizer(
+                    wordsListener = StopWordsFileSanitizer(
                         wordsListener = LatinAlphabeticWordCounter(
                             wordCountListener = ConsoleWordCountListener(),
-                        )
+                        ),
+                        errorReporter = ::println
                     ),
                 ),
             )
@@ -144,11 +145,23 @@ class HyphenSanitizer(
     }
 }
 
-class FileSystemStopWordsSanitizer(
+class StopWordsFileSanitizer(
     private val wordsListener: WordsListener,
+    private val errorReporter: ErrorReporter,
 ) : WordsListener {
+    private val file = File("stop_words.txt")
+
+    init {
+        require(file.isFile) { "File $file is not a file." }
+    }
+
     override fun onWordsAnalysed(words: List<String>) {
-        val stopWords = File("stop_words.txt").readLines()
+        val stopWords = try {
+            file.readLines()
+        } catch (e: Exception) {
+            errorReporter.report("Error reading file $file: ${e.message}")
+            return
+        }
         val withoutStopWords = words.filter { it !in stopWords }
         wordsListener.onWordsAnalysed(withoutStopWords)
     }
