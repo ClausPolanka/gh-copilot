@@ -17,7 +17,7 @@ fun main(args: Array<String> = emptyArray()) {
     )
     val userInputSource = UserInputSources(
         userInputListener = wordCounterApplication,
-        ::println,
+        errorReporter = ::println,
     ).get(args)
     userInputSource?.readUserInput()
 }
