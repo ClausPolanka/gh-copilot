@@ -10,7 +10,7 @@ class UserInputSources(
     private val errorReporter: ErrorReporter,
 ) {
     fun get(args: Array<String>): UserInputSource? {
-        if (args.isNotEmpty()) {
+        if ((args.contains("-index") && args.size == 2).or(args.contains("-index").not() && args.size == 1)) {
             return createFileInputSource(args)
         }
         return ConsoleUserInputSource(userInputListener)

@@ -5,7 +5,7 @@ import wordcounter.domain.words.*
 import java.io.*
 
 class FileSystemStopWordsFilter(
-    private val wordsListener: WordsListener,
+    private val wordsListener: List<WordsListener>,
     private val errorReporter: ErrorReporter,
 ) : WordsListener {
     private val file = File("stop_words.txt")
@@ -22,6 +22,6 @@ class FileSystemStopWordsFilter(
             return
         }
         val withoutStopWords = words.filter { it !in stopWords }
-        wordsListener.onWordsAnalysed(withoutStopWords)
+        wordsListener.forEach { it.onWordsAnalysed(withoutStopWords) }
     }
 }

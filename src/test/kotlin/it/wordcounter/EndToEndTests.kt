@@ -3,6 +3,7 @@ package it.wordcounter
 import org.junit.jupiter.api.*
 import wordcounter.*
 import java.io.*
+import java.lang.System.*
 import kotlin.test.*
 import kotlin.test.Test
 
@@ -76,6 +77,21 @@ class EndToEndTests {
         )
     }
 
+    @Test
+    fun `a user wants to see an index of the given user input`() {
+        aUserEnters("Mary had a little lamb")
+        main(args = arrayOf("-index"))
+        val expected = StringBuilder()
+            .appendLine("The text contains 4 word(s), 4 of them unique. The average word length is 4,25 characters long.")
+            .appendLine("Index:")
+            .appendLine("had")
+            .appendLine("lamb")
+            .appendLine("little")
+            .append("Mary")
+            .toString()
+        assertContains(uiOutput(), expected)
+    }
+
     private fun uiOutput() = outputStream.toString().trim()
 
     @BeforeEach
@@ -92,7 +108,7 @@ class EndToEndTests {
     private var outputStream = ByteArrayOutputStream()
     private lateinit var inputStream: ByteArrayInputStream
     private fun aUserEnters(userInput: String) {
-        inputStream = ByteArrayInputStream("$userInput${System.lineSeparator()}".toByteArray())
+        inputStream = ByteArrayInputStream("$userInput${lineSeparator()}".toByteArray())
         System.setIn(inputStream)
     }
 }

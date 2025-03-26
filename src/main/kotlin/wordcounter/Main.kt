@@ -2,7 +2,7 @@ package wordcounter
 
 import wordcounter.domain.application.*
 import wordcounter.domain.counting.*
-import wordcounter.domain.textanalysing.api.*
+import wordcounter.domain.index.*
 import wordcounter.domain.textanalysing.impl.*
 import wordcounter.domain.wordssanitizing.*
 import wordcounter.io.presentation.*
@@ -10,29 +10,26 @@ import wordcounter.io.stopwords.*
 import wordcounter.io.userinput.impl.*
 
 fun main(args: Array<String> = emptyArray()) {
-    val wordCounterApplication = WordCounterApplication(
-        textAnalyser = textAnalyser(wordCounter()),
-    )
-    val userInputSource = UserInputSources(
-        userInputListener = wordCounterApplication,
-        errorReporter = ::println,
-    ).get(args)
-    userInputSource?.readUserInput()
-}
+    val wordsIndex =
+        WordsIndices().get(args)
 
-/**
- * Ensure `wordCounter` is last in words listener chain.
- */
-private fun textAnalyser(wordCounter: LatinAlphabeticWordCounter): TextAnalyser =
-    WhiteSpacesSeparatedWordsAnalyser(
+    fun wordCounter() =
+        LatinAlphabeticWordCounter(ConsoleWordCountListener())
+
+    fun textAnalyser() = WhiteSpacesSeparatedWordsAnalyser(
         wordsListener = HyphenSanitizer(
             wordsListener = PunctuationSanitizer(
                 wordsListener = FileSystemStopWordsFilter(
-                    wordsListener = wordCounter,
+                    wordsListener = listOf(wordCounter(), wordsIndex),
                     errorReporter = ::println,
                 ),
             ),
         ),
     )
 
-private fun wordCounter() = LatinAlphabeticWordCounter(wordCountListener = ConsoleWordCountListener())
+    val userInputSource = UserInputSources(
+        userInputListener = WordCounterApplication(textAnalyser()),
+        errorReporter = ::println,
+    ).get(args)
+    userInputSource?.readUserInput()
+}
