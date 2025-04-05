@@ -12,7 +12,7 @@ class EndToEndTests {
     fun `a user enters text containing latin alphabetic words while ignoring stop words`() {
         aUserEnters("Humpty-Dumpty sat on a wall. Humpty-Dumpty had a great fall.")
         main()
-        assertContains(
+        assertEquals(
             uiOutput(),
             "The text contains 7 word(s), 6 of them unique. The average word length is 6,14 characters long."
         )
@@ -21,7 +21,7 @@ class EndToEndTests {
     @Test
     fun `a user provides a file as a user input source`() {
         main(arrayOf("my_text.txt"))
-        assertContains(
+        assertEquals(
             uiOutput(),
             "The text contains 4 word(s), 4 of them unique. The average word length is 4,25 characters long."
         )
@@ -31,7 +31,7 @@ class EndToEndTests {
     fun `a user enters a word containing numbers`() {
         aUserEnters("Ma3ry")
         main()
-        assertContains(
+        assertEquals(
             uiOutput(),
             "The text contains 0 word(s), 0 of them unique. The average word length is 0,00 characters long."
         )
@@ -41,7 +41,7 @@ class EndToEndTests {
     fun `a user enters a word ending with a punctuation mark`() {
         aUserEnters("Mary?")
         main()
-        assertContains(
+        assertEquals(
             uiOutput(),
             "The text contains 1 word(s), 1 of them unique. The average word length is 4,00 characters long."
         )
@@ -51,7 +51,7 @@ class EndToEndTests {
     fun `a user enters a blank text`() {
         aUserEnters("    ")
         main()
-        assertContains(
+        assertEquals(
             uiOutput(),
             "The text contains 0 word(s), 0 of them unique. The average word length is 0,00 characters long."
         )
@@ -61,7 +61,7 @@ class EndToEndTests {
     fun `a user enters nothing and then presses enter`() {
         aUserEnters("")
         main()
-        assertContains(
+        assertEquals(
             uiOutput(),
             "The text contains 0 word(s), 0 of them unique. The average word length is 0,00 characters long."
         )
@@ -71,7 +71,7 @@ class EndToEndTests {
     fun `a user enters only stop words`() {
         aUserEnters("a on the off")
         main()
-        assertContains(
+        assertEquals(
             uiOutput(),
             "The text contains 0 word(s), 0 of them unique. The average word length is 0,00 characters long."
         )
@@ -89,10 +89,10 @@ class EndToEndTests {
             .appendLine("little")
             .append("Mary")
             .toString()
-        assertContains(uiOutput(), expected)
+        assertEquals(uiOutput(), expected)
     }
 
-    private fun uiOutput() = outputStream.toString().trim()
+    private fun uiOutput() = outputStream.toString().trim().removePrefix("Please enter text: ")
 
     @BeforeEach
     fun setUp() {
