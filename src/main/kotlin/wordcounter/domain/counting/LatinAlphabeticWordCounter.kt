@@ -9,8 +9,8 @@ class LatinAlphabeticWordCounter(
         val latinAlphabetWords = words.filter { w -> w.all { c -> c.isLetter() } }
         wordCountListener.onWordsCounted(
             WordCount(
-                latinAlphabetWords.count(),
-                latinAlphabetWords.toSet().count(),
+                latinAlphabetWords.size,
+                latinAlphabetWords.distinct().size,
                 latinAlphabetWords.averageWordLength()
             )
         )
