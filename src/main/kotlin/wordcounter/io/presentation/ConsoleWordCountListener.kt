@@ -3,11 +3,12 @@ package wordcounter.io.presentation
 import wordcounter.domain.counting.*
 
 class ConsoleWordCountListener : WordCountListener {
-    override fun onWordsCounted(wordCount: Int, uniqueWordCount: Int, averageWordLength: Double) {
-        println(
-            "The text contains $wordCount word(s), " +
-                "$uniqueWordCount of them unique. " +
-                "The average word length is ${"%.2f".format(averageWordLength)} characters long."
-        )
+    override fun onWordsCounted(wordCount: WordCount) {
+        val output = buildString {
+            append("The text contains ${wordCount.wordCount} word(s), ")
+            append("${wordCount.uniqueWordCount} of them unique. ")
+            append("The average word length is ${"%.2f".format(wordCount.averageWordLength)} characters long.")
+        }
+        println(output)
     }
 }

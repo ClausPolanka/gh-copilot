@@ -10,7 +10,9 @@ class LatinAlphabeticWordCounter(
         val wordCount = latinAlphabetWords.count()
         val uniqueWordCount = latinAlphabetWords.toSet().count()
         val averageWordLength = latinAlphabetWords.averageWordLength()
-        wordCountListener.onWordsCounted(wordCount, uniqueWordCount, averageWordLength)
+        wordCountListener.onWordsCounted(
+            WordCount(wordCount, uniqueWordCount, averageWordLength)
+        )
     }
 
     private fun List<String>.averageWordLength() =
