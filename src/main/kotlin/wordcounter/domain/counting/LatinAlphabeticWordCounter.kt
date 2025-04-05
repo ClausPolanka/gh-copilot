@@ -7,11 +7,12 @@ class LatinAlphabeticWordCounter(
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
         val latinAlphabetWords = words.filter { w -> w.all { c -> c.isLetter() } }
-        val wordCount = latinAlphabetWords.count()
-        val uniqueWordCount = latinAlphabetWords.toSet().count()
-        val averageWordLength = latinAlphabetWords.averageWordLength()
         wordCountListener.onWordsCounted(
-            WordCount(wordCount, uniqueWordCount, averageWordLength)
+            WordCount(
+                latinAlphabetWords.count(),
+                latinAlphabetWords.toSet().count(),
+                latinAlphabetWords.averageWordLength()
+            )
         )
     }
 
