@@ -18,7 +18,7 @@ class LatinAlphabeticWordCounter(
 
     private fun List<String>.averageWordLength() =
         if (isNotEmpty()) {
-            sumOf { it.length }.toDouble() / count()
+            map { it.length }.average()
         } else {
             0.0
         }
