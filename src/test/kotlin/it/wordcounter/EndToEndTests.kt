@@ -2,6 +2,7 @@ package it.wordcounter
 
 import org.junit.jupiter.api.*
 import wordcounter.*
+import wordcounter.io.presentation.*
 import java.io.*
 import java.lang.System.*
 import kotlin.test.*
@@ -14,7 +15,7 @@ class EndToEndTests {
         main()
         assertEquals(
             uiOutput(),
-            "The text contains 7 word(s), 6 of them unique. The average word length is 6,14 characters long."
+            "The text contains 7 word(s), 6 of them unique. The average word length is ${6.14.format()} characters long."
         )
     }
 
@@ -23,7 +24,7 @@ class EndToEndTests {
         main(arrayOf("my_text.txt"))
         assertEquals(
             uiOutput(),
-            "The text contains 4 word(s), 4 of them unique. The average word length is 4,25 characters long."
+            "The text contains 4 word(s), 4 of them unique. The average word length is ${4.25.format()} characters long."
         )
     }
 
@@ -33,7 +34,7 @@ class EndToEndTests {
         main()
         assertEquals(
             uiOutput(),
-            "The text contains 0 word(s), 0 of them unique. The average word length is 0,00 characters long."
+            "The text contains 0 word(s), 0 of them unique. The average word length is ${0.00.format()} characters long."
         )
     }
 
@@ -43,7 +44,7 @@ class EndToEndTests {
         main()
         assertEquals(
             uiOutput(),
-            "The text contains 1 word(s), 1 of them unique. The average word length is 4,00 characters long."
+            "The text contains 1 word(s), 1 of them unique. The average word length is ${4.00.format()} characters long."
         )
     }
 
@@ -53,7 +54,7 @@ class EndToEndTests {
         main()
         assertEquals(
             uiOutput(),
-            "The text contains 0 word(s), 0 of them unique. The average word length is 0,00 characters long."
+            "The text contains 0 word(s), 0 of them unique. The average word length is ${0.00.format()} characters long."
         )
     }
 
@@ -63,7 +64,7 @@ class EndToEndTests {
         main()
         assertEquals(
             uiOutput(),
-            "The text contains 0 word(s), 0 of them unique. The average word length is 0,00 characters long."
+            "The text contains 0 word(s), 0 of them unique. The average word length is ${0.00.format()} characters long."
         )
     }
 
@@ -73,7 +74,7 @@ class EndToEndTests {
         main()
         assertEquals(
             uiOutput(),
-            "The text contains 0 word(s), 0 of them unique. The average word length is 0,00 characters long."
+            "The text contains 0 word(s), 0 of them unique. The average word length is ${0.00.format()} characters long."
         )
     }
 
@@ -82,7 +83,7 @@ class EndToEndTests {
         aUserEnters("Mary had a little lamb")
         main(args = arrayOf("-index"))
         val expected = StringBuilder()
-            .appendLine("The text contains 4 word(s), 4 of them unique. The average word length is 4,25 characters long.")
+            .appendLine("The text contains 4 word(s), 4 of them unique. The average word length is ${4.25.format()} characters long.")
             .appendLine("Index:")
             .appendLine("had")
             .appendLine("lamb")
@@ -96,19 +97,19 @@ class EndToEndTests {
 
     @BeforeEach
     fun setUp() {
-        System.setOut(PrintStream(outputStream))
+        setOut(PrintStream(outputStream))
     }
 
     @AfterEach
     fun tearDown() {
-        System.setOut(System.out)
-        System.setIn(System.`in`)
+        setOut(out)
+        setIn(`in`)
     }
 
     private var outputStream = ByteArrayOutputStream()
     private lateinit var inputStream: ByteArrayInputStream
     private fun aUserEnters(userInput: String) {
         inputStream = ByteArrayInputStream("$userInput${lineSeparator()}".toByteArray())
-        System.setIn(inputStream)
+        setIn(inputStream)
     }
 }
