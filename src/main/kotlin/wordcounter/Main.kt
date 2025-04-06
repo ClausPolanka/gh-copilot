@@ -10,12 +10,9 @@ import wordcounter.io.stopwords.*
 import wordcounter.io.userinput.impl.*
 
 fun main(args: Array<String> = emptyArray()) {
-    val wordsIndex =
-        WordsIndices().get(args)
-
-    fun wordCounter() =
-        LatinAlphabeticWordCounter(ConsoleWordCountListener())
-
+    val options = WordCounterAppOptions(args)
+    val wordsIndex = WordsIndices().get(options)
+    fun wordCounter() = LatinAlphabeticWordCounter(ConsoleWordCountListener())
     fun textAnalyser() = WhiteSpacesSeparatedWordsAnalyser(
         wordsListener = HyphenSanitizer(
             wordsListener = PunctuationSanitizer(
@@ -30,6 +27,6 @@ fun main(args: Array<String> = emptyArray()) {
     val userInputSource = UserInputSources(
         userInputListener = WordCounterApplication(textAnalyser()),
         errorReporter = ::println,
-    ).get(args)
+    ).get(options)
     userInputSource?.readUserInput()
 }

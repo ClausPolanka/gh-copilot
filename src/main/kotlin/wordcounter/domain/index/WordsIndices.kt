@@ -1,22 +1,21 @@
 package wordcounter.domain.index
 
+import wordcounter.domain.application.*
 import wordcounter.domain.index.impl.*
 import wordcounter.io.presentation.*
 
 class WordsIndices {
-    fun get(args: Array<String>) =
-        if (args.contains("-index").not())
+    fun get(options: WordCounterAppOptions) =
+        if (options.hasIndexOption().not())
             EmptyWordsIndex()
-        else if (args.any { it.contains("-dictionary") }) {
-            val dictFileName =
-                args.find { it.startsWith("-dictionary") }?.split("=")?.get(1) ?: error("Invalid -dictionary option")
+        else if (options.hasDictionaryOption()) {
             WordsIndex(
                 wordsIndexListener = FileSystemDictionaryCheckedWordsIndex(
                     wordsIndexListener = ConsoleWordsIndexListenerDictionaryChecked(),
                     errorReporter = ::println,
-                    filePath = dictFileName,
+                    filePath = options.getDictFileName(),
                 )
             )
         } else
-            WordsIndex(ConsoleWordsIndexListener())
+            WordsIndex(ConsoleWordsIndex())
 }
