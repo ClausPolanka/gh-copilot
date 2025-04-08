@@ -11,19 +11,6 @@ class WordCounter(
         wordCountListener.onWordsCounted(wordCount)
     }
 
-    private fun count(words: List<String>): WordCount {
-        val filteredWords = words.filter { word -> wordsFilter.all { f -> f(word) } }
-        return WordCount(
-            regularWordCount = filteredWords.size,
-            uniqueWordCount = filteredWords.distinct().size,
-            averageWordLength = filteredWords.averageWordLength()
-        )
-    }
-
-    private fun List<String>.averageWordLength() =
-        if (isNotEmpty()) {
-            map { it.length }.average()
-        } else {
-            0.0
-        }
+    private fun count(words: List<String>): WordCount =
+        WordCount(words.filter { word -> wordsFilter.all { f -> f(word) } })
 }

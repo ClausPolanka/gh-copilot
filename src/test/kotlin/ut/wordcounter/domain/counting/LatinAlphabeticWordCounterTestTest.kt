@@ -11,14 +11,7 @@ class LatinAlphabeticWordCounterTestTest {
         var actual: WordCount? = null
         val sut = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf("word"))
-        assertEquals(
-            WordCount(
-                regularWordCount = 1,
-                uniqueWordCount = 1,
-                averageWordLength = 4.00,
-            ),
-            actual,
-        )
+        assertEquals(WordCount(listOf("word")), actual)
     }
 
     @Test
@@ -26,14 +19,7 @@ class LatinAlphabeticWordCounterTestTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf("word", "word"))
-        assertEquals(
-            WordCount(
-                regularWordCount = 2,
-                uniqueWordCount = 1,
-                averageWordLength = 4.00,
-            ),
-            actual,
-        )
+        assertEquals(WordCount(listOf("word", "word")), actual)
     }
 
     @Test
@@ -41,14 +27,7 @@ class LatinAlphabeticWordCounterTestTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf("1word", "wo1rd", "word1"))
-        assertEquals(
-            WordCount(
-                regularWordCount = 0,
-                uniqueWordCount = 0,
-                averageWordLength = 0.00,
-            ),
-            actual,
-        )
+        assertEquals(WordCount(emptyList()), actual)
     }
 
     @Test
@@ -56,14 +35,7 @@ class LatinAlphabeticWordCounterTestTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf("-word", "wo?rd", "word!"))
-        assertEquals(
-            WordCount(
-                regularWordCount = 0,
-                uniqueWordCount = 0,
-                averageWordLength = 0.00,
-            ),
-            actual,
-        )
+        assertEquals(WordCount(emptyList()), actual)
     }
 
     @Test
@@ -71,14 +43,7 @@ class LatinAlphabeticWordCounterTestTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf(" word", " word ", "word "))
-        assertEquals(
-            WordCount(
-                regularWordCount = 0,
-                uniqueWordCount = 0,
-                averageWordLength = 0.00,
-            ),
-            actual,
-        )
+        assertEquals(WordCount(emptyList()), actual)
     }
 
     @Test
@@ -86,14 +51,7 @@ class LatinAlphabeticWordCounterTestTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf(""))
-        assertEquals(
-            WordCount(
-                regularWordCount = 0,
-                uniqueWordCount = 0,
-                averageWordLength = 0.00,
-            ),
-            actual,
-        )
+        assertEquals(WordCount(emptyList()), actual)
     }
 
     @Test
@@ -101,14 +59,7 @@ class LatinAlphabeticWordCounterTestTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf(" "))
-        assertEquals(
-            WordCount(
-                regularWordCount = 0,
-                uniqueWordCount = 0,
-                averageWordLength = 0.00,
-            ),
-            actual,
-        )
+        assertEquals(WordCount(emptyList()), actual)
     }
 
     @Test
@@ -116,13 +67,6 @@ class LatinAlphabeticWordCounterTestTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = emptyList())
-        assertEquals(
-            WordCount(
-                regularWordCount = 0,
-                uniqueWordCount = 0,
-                averageWordLength = 0.00,
-            ),
-            actual,
-        )
+        assertEquals(WordCount(emptyList()), actual)
     }
 }

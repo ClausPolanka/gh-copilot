@@ -1,7 +1,14 @@
 package wordcounter.domain.counting
 
 data class WordCount(
-    val regularWordCount: Int,
-    val uniqueWordCount: Int,
-    val averageWordLength: Double,
-)
+    private val words: List<String>,
+) {
+    fun all() = words.size
+    fun unique() = words.distinct().size
+    fun averageWordLength() =
+        if (words.isNotEmpty()) {
+            words.map { it.length }.average()
+        } else {
+            0.0
+        }
+}
