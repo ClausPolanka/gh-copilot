@@ -16,13 +16,21 @@ class FileSystemDictionaryCheckedWordsIndex(
     }
 
     override fun onWordsIndexed(words: List<String>) {
-        val dictionary = try {
-            file.readLines(Charsets.UTF_8)
-        } catch (e: IOException) {
-            errorReporter.report("Error reading file $file: ${e.message}")
-            return
-        }
-        val dictWordsIndex = words.map { if (dictionary.contains(it)) it else "$it*" }
-        wordsIndexListener.onWordsIndexed(dictWordsIndex)
+        val dictionary = createDictionaryFrom(file)
+        val index = words.indexUsing(dictionary)
+        wordsIndexListener.onWordsIndexed(index)
     }
+
+    private fun createDictionaryFrom(f: File): List<String> {
+        return try {
+            f.readLines(Charsets.UTF_8)
+        } catch (e: IOException) {
+            errorReporter.report("Error reading file $f: ${e.message}")
+            emptyList()
+        }
+    }
+
+    private fun List<String>.indexUsing(
+        dictionary: List<String>,
+    ) = map { if (dictionary.contains(it)) it else "$it*" }
 }
