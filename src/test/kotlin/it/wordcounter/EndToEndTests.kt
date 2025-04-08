@@ -93,6 +93,30 @@ class EndToEndTests {
         assertEquals(uiOutput(), expected)
     }
 
+    @Test
+    fun `a user wants to see an index of the given user input checked against a dictionary`() {
+        aUserEnters("Mary had a little lamb")
+        main(args = arrayOf("-index", "-dictionary=dict.txt"))
+        val expected = StringBuilder()
+            .appendLine("The text contains 4 word(s), 4 of them unique. The average word length is ${4.25.format()} characters long.")
+            .appendLine("Index: (unknown: 2)")
+            .appendLine("had")
+            .appendLine("lamb*")
+            .appendLine("little")
+            .append("Mary*")
+            .toString()
+        assertEquals(uiOutput(), expected)
+    }
+
+    @Test
+    fun `a user applies invalid program option`() {
+        aUserEnters("Doesn't matter")
+        assertThrows<IllegalArgumentException>(
+            { "Invalid program option should throw" },
+            { main(args = arrayOf("-invalid")) }
+        )
+    }
+
     private fun uiOutput() = outputStream.toString().trim().removePrefix("Please enter text: ")
 
     @BeforeEach

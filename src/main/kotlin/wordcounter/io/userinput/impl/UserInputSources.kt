@@ -10,14 +10,14 @@ class UserInputSources(
     private val userInputListener: UserInputListener,
     private val errorReporter: ErrorReporter,
 ) {
-    fun get(options: WordCounterAppOptions): UserInputSource? {
+    fun get(options: WordCounterApplicationOptions): UserInputSource? {
         if (options.hasUserFileInput()) {
             return createFileInputSource(options)
         }
         return ConsoleUserInputSource(userInputListener)
     }
 
-    private fun createFileInputSource(args: WordCounterAppOptions): FileUserInputSource? {
+    private fun createFileInputSource(args: WordCounterApplicationOptions): FileUserInputSource? {
         val fileUserInputSource = try {
             FileUserInputSource(
                 userInputListener,
