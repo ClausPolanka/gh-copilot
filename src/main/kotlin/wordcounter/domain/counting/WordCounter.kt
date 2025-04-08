@@ -2,7 +2,8 @@ package wordcounter.domain.counting
 
 import wordcounter.domain.words.*
 
-class LatinAlphabeticWordCounter(
+class WordCounter(
+    private val wordsFilter: List<(String) -> Boolean> = emptyList(),
     private val wordCountListener: WordCountListener,
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
@@ -11,18 +12,13 @@ class LatinAlphabeticWordCounter(
     }
 
     private fun count(words: List<String>): WordCount {
-        val latinAlphabetWords = filterLatinAlphabeticWords(words)
+        val filteredWords = words.filter { word -> wordsFilter.all { f -> f(word) } }
         return WordCount(
-            regularWordCount = latinAlphabetWords.size,
-            uniqueWordCount = latinAlphabetWords.distinct().size,
-            averageWordLength = latinAlphabetWords.averageWordLength()
+            regularWordCount = filteredWords.size,
+            uniqueWordCount = filteredWords.distinct().size,
+            averageWordLength = filteredWords.averageWordLength()
         )
     }
-
-    private fun filterLatinAlphabeticWords(words: List<String>): List<String> =
-        words
-            .filter { it.isNotEmpty() }
-            .filter { w -> w.all { c -> c.isLetter() } }
 
     private fun List<String>.averageWordLength() =
         if (isNotEmpty()) {

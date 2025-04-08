@@ -1,10 +1,11 @@
 package ut.wordcounter.domain.counting
 
+import wordcounter.*
 import wordcounter.domain.counting.*
 import wordcounter.domain.words.*
 import kotlin.test.*
 
-class LatinAlphabeticWordCounterTest {
+class LatinAlphabeticWordCounterTestTest {
     @Test
     fun `one latin alphabet word`() {
         var actual: WordCount? = null

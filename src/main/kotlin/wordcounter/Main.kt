@@ -12,12 +12,12 @@ import wordcounter.io.userinput.impl.*
 fun main(args: Array<String> = emptyArray()) {
     val options = WordCounterApplicationOptions(args)
     val wordsIndex = WordsIndices().get(options)
-    fun wordCounter() = LatinAlphabeticWordCounter(ConsoleWordCountPrinter())
+    val wordCounter = LatinAlphabeticWordCounter(ConsoleWordCountPrinter())
     fun textAnalyser() = WhiteSpacesSeparatedWordsAnalyser(
         wordsListener = HyphenSanitizer(
             wordsListener = PunctuationSanitizer(
                 wordsListener = FileSystemStopWordsFilter(
-                    wordsListener = listOf(wordCounter(), wordsIndex),
+                    wordsListener = listOf(wordCounter, wordsIndex),
                     errorReporter = ::println,
                 ),
             ),
@@ -29,4 +29,13 @@ fun main(args: Array<String> = emptyArray()) {
         errorReporter = ::println,
     ).get(options)
     userInputSource?.readUserInput()
+}
+
+fun LatinAlphabeticWordCounter(wordCountListener: WordCountListener): WordCounter {
+    val latinAlphabeticWordsFilter: (String) -> Boolean = { w -> w.all { c -> c.isLetter() } }
+    val nonEmptyWordsFilter: (String) -> Boolean = { it.isNotEmpty() }
+    return WordCounter(
+        wordsFilter = listOf(nonEmptyWordsFilter, latinAlphabeticWordsFilter),
+        wordCountListener = wordCountListener
+    )
 }
