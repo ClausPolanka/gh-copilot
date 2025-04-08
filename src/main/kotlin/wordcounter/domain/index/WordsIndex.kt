@@ -7,7 +7,8 @@ class WordsIndex(
     private val wordsIndexListener: WordsIndexListener,
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
-        val sortedWords = words.sortedBy { it.lowercase() }.distinct()
-        wordsIndexListener.onWordsIndexed(sortedWords)
+        wordsIndexListener.onWordsIndexed(words.index())
     }
+
+    private fun List<String>.index(): List<String> = sortedBy { it.lowercase() }.distinct()
 }
