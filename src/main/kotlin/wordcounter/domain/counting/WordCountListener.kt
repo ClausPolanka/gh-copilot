@@ -1,5 +1,5 @@
 package wordcounter.domain.counting
 
-interface WordCountListener {
+fun interface WordCountListener {
     fun onWordsCounted(wordCount: WordCount)
 }

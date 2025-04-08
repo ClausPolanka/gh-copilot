@@ -6,7 +6,9 @@ class LatinAlphabeticWordCounter(
     private val wordCountListener: WordCountListener,
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
-        val latinAlphabetWords = words.filter { w -> w.all { c -> c.isLetter() } }
+        val latinAlphabetWords = words
+            .filter { it.isNotEmpty() }
+            .filter { w -> w.all { c -> c.isLetter() } }
         wordCountListener.onWordsCounted(
             WordCount(
                 latinAlphabetWords.size,
