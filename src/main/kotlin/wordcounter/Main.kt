@@ -12,7 +12,7 @@ import wordcounter.io.userinput.impl.*
 fun main(args: Array<String> = emptyArray()) {
     val options = WordCounterApplicationOptions(args)
     val wordsIndex = WordsIndices().get(options)
-    fun wordCounter() = LatinAlphabeticWordCounter(ConsoleWordCountListener())
+    fun wordCounter() = LatinAlphabeticWordCounter(ConsoleWordCountPrinter())
     fun textAnalyser() = WhiteSpacesSeparatedWordsAnalyser(
         wordsListener = HyphenSanitizer(
             wordsListener = PunctuationSanitizer(
