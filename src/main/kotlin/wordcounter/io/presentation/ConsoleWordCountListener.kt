@@ -6,6 +6,10 @@ import java.util.*
 
 class ConsoleWordCountListener : WordCountListener {
     override fun onWordsCounted(wordCount: WordCount) {
+        print(wordCount)
+    }
+
+    private fun print(wordCount: WordCount) {
         val output = buildString {
             with(wordCount) {
                 append("The text contains $regularWordCount word(s), ")
