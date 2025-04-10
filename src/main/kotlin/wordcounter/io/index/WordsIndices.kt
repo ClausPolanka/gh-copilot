@@ -7,11 +7,12 @@ import wordcounter.io.files.*
 import wordcounter.io.presentation.*
 
 class WordsIndices {
-    fun get(options: WordCounterApplicationOptions) = when {
-        options.hasIndexOption().not() -> EmptyWordsIndex()
-        options.hasDictionaryOption() -> wordsIndexCheckedAgainstDictionary(options)
-        else -> WordsIndex(ConsoleWordsIndexPrinter())
-    }
+    fun get(options: WordCounterApplicationOptions) =
+        when {
+            options.hasIndexOption() -> WordsIndex(ConsoleWordsIndexPrinter())
+            options.hasDictionaryOption() -> wordsIndexCheckedAgainstDictionary(options)
+            else -> EmptyWordsIndex()
+        }
 
     private fun wordsIndexCheckedAgainstDictionary(options: WordCounterApplicationOptions): WordsIndex {
         val dictionaryFile = WordCounterFile(

@@ -15,7 +15,7 @@ class WordCounterApplicationOptions(
         )
     }
 
-    fun hasIndexOption() = args.contains(INDEX_OPTION)
+    fun hasIndexOption() = args.contains(INDEX_OPTION).and(hasDictionaryOption().not())
     fun hasDictionaryOption() = args.any { it.contains(DICTIONARY_OPTION) }
     fun getDictionaryFileName() = args
         .find { it.startsWith(DICTIONARY_OPTION) }
