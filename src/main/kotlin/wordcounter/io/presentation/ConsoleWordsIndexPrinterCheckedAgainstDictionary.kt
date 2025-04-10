@@ -6,8 +6,10 @@ private const val UNKNOWN_MARK = "*"
 
 class ConsoleWordsIndexPrinterCheckedAgainstDictionary : WordsIndexListener {
     override fun onWordsIndexed(words: List<String>) {
-        val unknownWords = words.filter { it.endsWith(UNKNOWN_MARK) }
-        println("Index: (unknown: ${unknownWords.size})")
+        println("Index: (unknown: ${words.unknowns()})")
         words.forEach(::println)
     }
+
+    private fun List<String>.unknowns() =
+        filter { it.endsWith(UNKNOWN_MARK) }.size
 }
