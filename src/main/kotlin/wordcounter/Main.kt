@@ -14,7 +14,7 @@ fun main(args: Array<String> = emptyArray()) {
     val options = WordCounterApplicationOptions(args)
     val wordsIndex = WordsIndices().get(options)
     val wordCounter = LatinAlphabeticWordCounter(ConsoleWordCountPrinter())
-    val stopWords = WordCounterFile(
+    val stopWordsFile = WordCounterFile(
         filePath = "stop_words.txt",
         errorReporter = ::println,
     )
@@ -22,7 +22,7 @@ fun main(args: Array<String> = emptyArray()) {
         wordsListener = HyphenSanitizer(
             wordsListener = PunctuationSanitizer(
                 wordsListener = StopWordsFilter(
-                    stopWords = stopWords.readFileContent(),
+                    stopWords = stopWordsFile.readContent(),
                     wordsListener = listOf(wordCounter, wordsIndex),
                 ),
             ),

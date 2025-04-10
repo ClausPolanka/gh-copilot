@@ -17,7 +17,7 @@ class WordCounterApplicationOptions(
 
     fun hasIndexOption() = args.contains(INDEX_OPTION)
     fun hasDictionaryOption() = args.any { it.contains(DICTIONARY_OPTION) }
-    fun getDictFileName() = args
+    fun getDictionaryFileName() = args
         .find { it.startsWith(DICTIONARY_OPTION) }
         ?.split("=")?.get(1)
         ?: error("Invalid -dictionary option")

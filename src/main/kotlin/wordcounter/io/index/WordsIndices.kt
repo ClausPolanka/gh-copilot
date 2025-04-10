@@ -14,15 +14,14 @@ class WordsIndices {
     }
 
     private fun wordsIndexCheckedAgainstDictionary(options: WordCounterApplicationOptions): WordsIndex {
-        val file = WordCounterFile(
-            filePath = options.getDictFileName(),
+        val dictionaryFile = WordCounterFile(
+            filePath = options.getDictionaryFileName(),
             errorReporter = ::println
         )
-        val fileContent: List<String> = file.readFileContent()
         return WordsIndex(
             wordsIndexListener = DictionaryCheckedWordsIndex(
                 wordsIndexListener = ConsoleWordsIndexPrinterCheckedAgainstDictionary(),
-                dictionary = fileContent,
+                dictionary = dictionaryFile.readContent(),
             )
         )
     }
