@@ -14,7 +14,7 @@ class LatinAlphabeticWordCounterTest {
     }
 
     @Test
-    fun `two two latin alphabet words`() {
+    fun `two latin alphabet words`() {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf("word", "word"))
