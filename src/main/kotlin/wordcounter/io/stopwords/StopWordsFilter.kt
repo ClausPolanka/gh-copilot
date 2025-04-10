@@ -7,9 +7,9 @@ class StopWordsFilter(
     private val wordsListener: List<WordsListener>,
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
-        val withoutStopWords = words.getWithoutStopWords()
+        val withoutStopWords = words.withoutStopWords()
         wordsListener.forEach { it.onWordsAnalysed(withoutStopWords) }
     }
 
-    private fun List<String>.getWithoutStopWords() = filter { it !in stopWords }
+    private fun List<String>.withoutStopWords() = filter { it !in stopWords }
 }
