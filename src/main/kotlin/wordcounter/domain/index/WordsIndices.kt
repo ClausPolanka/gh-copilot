@@ -14,7 +14,7 @@ class WordsIndices {
 
     private fun wordsIndexCheckedAgainstDictionary(options: WordCounterApplicationOptions) = WordsIndex(
         wordsIndexListener = FileSystemDictionaryCheckedWordsIndex(
-            wordsIndexListener = ConsoleWordsIndexListenerCheckedAgainstDictionary(),
+            wordsIndexListener = ConsoleWordsIndexPrinterCheckedAgainstDictionary(),
             errorReporter = ::println,
             filePath = options.getDictFileName(),
         )
