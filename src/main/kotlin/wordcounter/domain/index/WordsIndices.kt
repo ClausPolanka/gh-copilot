@@ -9,7 +9,7 @@ class WordsIndices {
         when {
             options.hasIndexOption().not() -> EmptyWordsIndex()
             options.hasDictionaryOption() -> wordsIndexCheckedAgainstDictionary(options)
-            else -> WordsIndex(ConsoleWordsIndexListener())
+            else -> WordsIndex(ConsoleWordsIndexPrinter())
         }
 
     private fun wordsIndexCheckedAgainstDictionary(options: WordCounterApplicationOptions) = WordsIndex(
