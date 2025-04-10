@@ -1,6 +1,7 @@
-package wordcounter.domain.index
+package wordcounter.io.index
 
 import wordcounter.domain.application.*
+import wordcounter.domain.index.*
 import wordcounter.domain.index.impl.*
 import wordcounter.io.files.*
 import wordcounter.io.presentation.*
