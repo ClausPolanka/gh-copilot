@@ -5,6 +5,7 @@ import wordcounter.domain.counting.*
 import wordcounter.domain.index.*
 import wordcounter.domain.textanalysing.impl.*
 import wordcounter.domain.wordssanitizing.*
+import wordcounter.io.files.*
 import wordcounter.io.presentation.*
 import wordcounter.io.stopwords.*
 import wordcounter.io.userinput.impl.*
@@ -13,12 +14,17 @@ fun main(args: Array<String> = emptyArray()) {
     val options = WordCounterApplicationOptions(args)
     val wordsIndex = WordsIndices().get(options)
     val wordCounter = LatinAlphabeticWordCounter(ConsoleWordCountPrinter())
+    val stopWords = WordCounterFile(
+        filePath = "stop_words.txt",
+        errorReporter = ::println,
+    )
+
     fun textAnalyser() = WhiteSpacesSeparatedWordsAnalyser(
         wordsListener = HyphenSanitizer(
             wordsListener = PunctuationSanitizer(
-                wordsListener = FileSystemStopWordsFilter(
+                wordsListener = StopWordsFilter(
+                    stopWords = stopWords.readFileContent(),
                     wordsListener = listOf(wordCounter, wordsIndex),
-                    errorReporter = ::println,
                 ),
             ),
         ),
