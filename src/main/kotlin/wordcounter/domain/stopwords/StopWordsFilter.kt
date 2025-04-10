@@ -1,4 +1,4 @@
-package wordcounter.io.stopwords
+package wordcounter.domain.stopwords
 
 import wordcounter.domain.words.*
 

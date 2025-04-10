@@ -3,11 +3,11 @@ package wordcounter
 import wordcounter.domain.application.*
 import wordcounter.domain.counting.*
 import wordcounter.domain.index.*
+import wordcounter.domain.stopwords.*
 import wordcounter.domain.textanalysing.impl.*
 import wordcounter.domain.wordssanitizing.*
 import wordcounter.io.files.*
 import wordcounter.io.presentation.*
-import wordcounter.io.stopwords.*
 import wordcounter.io.userinput.impl.*
 
 fun main(args: Array<String> = emptyArray()) {
