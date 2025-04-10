@@ -1,6 +1,5 @@
 package ut.wordcounter.domain.counting
 
-import wordcounter.*
 import wordcounter.domain.counting.*
 import wordcounter.domain.words.*
 import kotlin.test.*
