@@ -6,3 +6,5 @@ build
 
 # IntelliJ specific files
 .idea
+
+.kotlin
