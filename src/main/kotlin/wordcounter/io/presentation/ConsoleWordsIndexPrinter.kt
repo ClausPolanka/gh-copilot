@@ -1,4 +1,4 @@
-package wordcounter.domain.index
+package wordcounter.io.presentation
 
 import wordcounter.domain.index.api.*
 
