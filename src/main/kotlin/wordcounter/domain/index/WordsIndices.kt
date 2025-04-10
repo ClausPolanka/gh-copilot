@@ -3,7 +3,6 @@ package wordcounter.domain.index
 import wordcounter.domain.application.*
 import wordcounter.domain.index.impl.*
 import wordcounter.io.files.*
-import wordcounter.io.index.impl.*
 import wordcounter.io.presentation.*
 
 class WordsIndices {
