@@ -7,15 +7,17 @@ class WordCounterApplicationOptions(
     private val args: Array<String>,
 ) {
     init {
+        val hasKnownOptions = args.filter { it.startsWith("-") }
+            .filterNot { it == INDEX_OPTION || it.startsWith(DICTIONARY_OPTION) }
+            .isEmpty()
+        val hasValidOptions = if (hasDictionaryOption()) hasIndexOption() else hasKnownOptions
         require(
-            value = args.filter { it.startsWith("-") }
-                .filterNot { it == INDEX_OPTION || it.startsWith(DICTIONARY_OPTION) }
-                .isEmpty(),
+            value = hasValidOptions,
             lazyMessage = { "wc [-index] [-dictionary=<dict.txt>] [<file>]" }
         )
     }
 
-    fun hasIndexOption() = args.contains(INDEX_OPTION).and(hasDictionaryOption().not())
+    fun hasIndexOption() = args.contains(INDEX_OPTION)
     fun hasDictionaryOption() = args.any { it.contains(DICTIONARY_OPTION) }
     fun getDictionaryFileName() = args
         .find { it.startsWith(DICTIONARY_OPTION) }

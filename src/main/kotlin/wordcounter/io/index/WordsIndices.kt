@@ -9,8 +9,8 @@ import wordcounter.io.presentation.*
 class WordsIndices {
     fun get(options: WordCounterApplicationOptions) =
         when {
-            options.hasIndexOption() -> WordsIndex(ConsoleWordsIndexPrinter())
             options.hasDictionaryOption() -> wordsIndexCheckedAgainstDictionary(options)
+            options.hasIndexOption() -> WordsIndex(ConsoleWordsIndexPrinter())
             else -> EmptyWordsIndex()
         }
 
