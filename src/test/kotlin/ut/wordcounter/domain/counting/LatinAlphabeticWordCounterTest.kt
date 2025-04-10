@@ -4,7 +4,7 @@ import wordcounter.domain.counting.*
 import wordcounter.domain.words.*
 import kotlin.test.*
 
-class LatinAlphabeticWordCounterTestTest {
+class LatinAlphabeticWordCounterTest {
     @Test
     fun `one latin alphabet word`() {
         var actual: WordCount? = null
