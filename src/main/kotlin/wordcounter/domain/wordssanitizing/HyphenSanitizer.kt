@@ -10,13 +10,15 @@ class HyphenSanitizer(
     }
 
     override fun onWordsAnalysed(words: List<String>) {
-        val sanitizedWords = words
-            .asSequence()
+        wordsListener.onWordsAnalysed(words.withoutHyphens())
+    }
+
+    private fun List<String>.withoutHyphens(): List<String> {
+        val sanitizedWords = asSequence()
             .filterNot { it.startsWith(HYPHEN) || it.endsWith(HYPHEN) }
             .map { it.replace(HYPHEN, "") }
             .filter { it.isNotBlank() }
             .toList()
-
-        wordsListener.onWordsAnalysed(sanitizedWords)
+        return sanitizedWords
     }
 }
