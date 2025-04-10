@@ -18,8 +18,7 @@ fun main(args: Array<String> = emptyArray()) {
         filePath = "stop_words.txt",
         errorReporter = ::println,
     )
-
-    fun textAnalyser() = WhiteSpacesSeparatedWordsAnalyser(
+    val textAnalyser = WhiteSpacesSeparatedWordsAnalyser(
         wordsListener = HyphenSanitizer(
             wordsListener = PunctuationSanitizer(
                 wordsListener = StopWordsFilter(
@@ -29,9 +28,8 @@ fun main(args: Array<String> = emptyArray()) {
             ),
         ),
     )
-
     val userInputSource = UserInputSources(
-        userInputListener = WordCounterApplication(textAnalyser()),
+        userInputListener = WordCounterApplication(textAnalyser),
         errorReporter = ::println,
     ).get(options)
     userInputSource?.readUserInput()
