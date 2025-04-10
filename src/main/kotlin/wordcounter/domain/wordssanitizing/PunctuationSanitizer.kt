@@ -6,7 +6,9 @@ class PunctuationSanitizer(
     private val wordsListener: WordsListener,
 ) : WordsListener {
     override fun onWordsAnalysed(words: List<String>) {
-        val wordsWithoutPunctuation = words.map { word -> word.replace("[,;!?.]".toRegex(), "") }
-        wordsListener.onWordsAnalysed(wordsWithoutPunctuation)
+        wordsListener.onWordsAnalysed(words.withoutPunctuation())
     }
+
+    private fun List<String>.withoutPunctuation() =
+        map { word -> word.replace("[,;!?.]".toRegex(), "") }
 }
