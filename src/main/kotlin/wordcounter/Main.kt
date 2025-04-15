@@ -13,7 +13,7 @@ import wordcounter.io.userinput.impl.*
 fun main(args: Array<String> = emptyArray()) {
     val options = WordCounterApplicationOptions(args)
     val wordsIndex = WordsIndices().get(options)
-    val wordCounter = LatinAlphabeticWordCounter(ConsoleWordCountPrinter())
+    val wordCounter = LatinAlphabeticWordCounter(wordCountListener = ConsoleWordCountPrinter())
     val stopWordsFile = WordCounterFile(
         filePath = "stop_words.txt",
         errorReporter = ::println,
