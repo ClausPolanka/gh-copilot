@@ -11,6 +11,6 @@ class DictionaryCheckedWordsIndex(
         wordsIndexListener.onWordsIndexed(index)
     }
 
-    private fun List<String>.indexUsing(dictionary: List<String>) =
+    private fun List<String>.indexUsing(dictionary: List<String>): List<String> =
         map { it.takeIf(dictionary::contains) ?: "$it*" }
 }
