@@ -14,5 +14,5 @@ class DictionaryCheckedWordsIndex(
     }
 
     private fun List<String>.indexUsing(dictionary: List<String>): List<String> =
-        map { it.takeIf(dictionary::contains) ?: (it + UNKNOWN_MARK) }
+        map { word -> word.takeIf(dictionary::contains) ?: (word + UNKNOWN_MARK) }
 }
