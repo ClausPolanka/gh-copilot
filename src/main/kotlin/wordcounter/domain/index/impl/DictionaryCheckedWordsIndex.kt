@@ -2,6 +2,8 @@ package wordcounter.domain.index.impl
 
 import wordcounter.domain.index.api.*
 
+private const val UNKNOWN_MARK = "*"
+
 class DictionaryCheckedWordsIndex(
     private val wordsIndexListener: WordsIndexListener,
     private val dictionary: List<String>,
@@ -12,5 +14,5 @@ class DictionaryCheckedWordsIndex(
     }
 
     private fun List<String>.indexUsing(dictionary: List<String>): List<String> =
-        map { it.takeIf(dictionary::contains) ?: "$it*" }
+        map { it.takeIf(dictionary::contains) ?: (it + UNKNOWN_MARK) }
 }
