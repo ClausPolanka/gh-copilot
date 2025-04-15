@@ -10,7 +10,7 @@ class WordsIndices {
     fun get(options: WordCounterApplicationOptions) =
         when {
             options.hasDictionaryOption() -> wordsIndexCheckedAgainstDictionary(options)
-            options.hasIndexOption() -> WordsIndex(ConsoleWordsIndexPrinter())
+            options.hasIndexOption() -> WordsIndex(wordsIndexListener = ConsoleWordsIndexPrinter())
             else -> EmptyWordsIndex()
         }
 
