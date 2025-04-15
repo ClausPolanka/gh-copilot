@@ -19,6 +19,7 @@ class LatinAlphabeticWordCounterTest {
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf("word", "word"))
         assertEquals(2, actual?.totalCount())
+        assertEquals(1, actual?.uniqueCount())
     }
 
     @Test
