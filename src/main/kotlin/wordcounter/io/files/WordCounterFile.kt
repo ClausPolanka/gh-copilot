@@ -13,12 +13,11 @@ class WordCounterFile(
         require(file.isFile) { "File $file is not a file." }
     }
 
-    fun readContent(): List<String> {
-        return try {
+    fun readContent(): List<String> =
+        try {
             file.readLines(Charsets.UTF_8)
         } catch (e: IOException) {
             errorReporter.report("Error reading file $file: ${e.message}")
             emptyList()
         }
-    }
 }
