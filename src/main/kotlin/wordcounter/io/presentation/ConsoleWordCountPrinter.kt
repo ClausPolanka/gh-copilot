@@ -11,8 +11,8 @@ class ConsoleWordCountPrinter : WordCountListener {
 
     private fun WordCount.toConsoleOutput(): String =
         buildString {
-            append("The text contains ${all()} word(s), ")
-            append("${unique()} of them unique. ")
+            append("The text contains ${totalCount()} word(s), ")
+            append("${uniqueCount()} of them unique. ")
             append("The average word length is ${averageWordLength().format()} characters long.")
         }
 }

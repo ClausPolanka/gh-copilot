@@ -10,7 +10,7 @@ class LatinAlphabeticWordCounterTest {
         var actual: WordCount? = null
         val sut = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf("word"))
-        assertEquals(1, actual?.all())
+        assertEquals(1, actual?.totalCount())
     }
 
     @Test
@@ -18,7 +18,7 @@ class LatinAlphabeticWordCounterTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf("word", "word"))
-        assertEquals(2, actual?.all())
+        assertEquals(2, actual?.totalCount())
     }
 
     @Test
@@ -26,7 +26,7 @@ class LatinAlphabeticWordCounterTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf("1word", "wo1rd", "word1"))
-        assertEquals(0, actual?.all())
+        assertEquals(0, actual?.totalCount())
     }
 
     @Test
@@ -34,7 +34,7 @@ class LatinAlphabeticWordCounterTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf("-word", "wo?rd", "word!"))
-        assertEquals(0, actual?.all())
+        assertEquals(0, actual?.totalCount())
     }
 
     @Test
@@ -42,7 +42,7 @@ class LatinAlphabeticWordCounterTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf(" word", " word ", "word "))
-        assertEquals(0, actual?.all())
+        assertEquals(0, actual?.totalCount())
     }
 
     @Test
@@ -50,7 +50,7 @@ class LatinAlphabeticWordCounterTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf(""))
-        assertEquals(0, actual?.all())
+        assertEquals(0, actual?.totalCount())
     }
 
     @Test
@@ -58,7 +58,7 @@ class LatinAlphabeticWordCounterTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = listOf(" "))
-        assertEquals(0, actual?.all())
+        assertEquals(0, actual?.totalCount())
     }
 
     @Test
@@ -66,6 +66,6 @@ class LatinAlphabeticWordCounterTest {
         var actual: WordCount? = null
         val sut: WordsListener = LatinAlphabeticWordCounter { wc -> actual = wc }
         sut.onWordsAnalysed(words = emptyList())
-        assertEquals(0, actual?.all())
+        assertEquals(0, actual?.totalCount())
     }
 }
