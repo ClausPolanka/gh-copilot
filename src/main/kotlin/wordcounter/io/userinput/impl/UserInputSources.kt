@@ -14,7 +14,12 @@ class UserInputSources(
         if (options.hasUserFileInput()) {
             return createFileInputSource(options)
         }
-        return ConsoleUserInputSource(userInputListener)
+        return ContinuousConsoleUserInputSource(
+            delegate = ConsoleUserInputSource(
+                emptyUserInputBehaviour = { throw EmptyUserInputException(message = "No user input therefore program exists") },
+                userInputListener = userInputListener,
+            ),
+        )
     }
 
     private fun createFileInputSource(args: WordCounterApplicationOptions): FileUserInputSource? {
@@ -30,4 +35,6 @@ class UserInputSources(
         }
         return fileUserInputSource
     }
+
+    class EmptyUserInputException(message: String) : RuntimeException(message)
 }
