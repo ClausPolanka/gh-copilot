@@ -3,9 +3,9 @@ package wordcounter.domain.counting
 import wordcounter.domain.wordsfiltering.*
 
 fun LatinAlphabeticWordCounter(wordCountListener: WordCountListener): WordCounter {
-    val wordsFilter = WordsFilter()
+    val wordFilters = WordFilters()
     return WordCounter(
-        wordsFilter = listOf(wordsFilter.nonEmptyStringFilter, wordsFilter.latinAlphabeticStringFilter),
+        wordsFilter = listOf(wordFilters.nonEmptyStringFilter, wordFilters.latinAlphabeticStringFilter),
         wordCountListener = wordCountListener
     )
 }
