@@ -21,7 +21,7 @@ class WordsIndices {
         )
         return WordsIndex(
             wordsIndexListener = DictionaryBasedWordsMarker(
-                wordsIndexListener = ConsoleWordsIndexPrinterCheckedAgainstDictionary(),
+                wordsIndexListener = ConsoleWordsIndexPrinterForDictionaryBasedMarkedWords(),
                 dictionary = dictionaryFile.readContent(),
             )
         )

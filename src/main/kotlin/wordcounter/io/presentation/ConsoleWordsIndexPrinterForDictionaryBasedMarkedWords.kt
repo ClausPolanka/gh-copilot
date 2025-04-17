@@ -4,7 +4,7 @@ import wordcounter.domain.index.api.*
 
 private const val UNKNOWN_MARK = "*"
 
-class ConsoleWordsIndexPrinterCheckedAgainstDictionary : WordsIndexListener {
+class ConsoleWordsIndexPrinterForDictionaryBasedMarkedWords : WordsIndexListener {
     override fun onWordsIndexed(words: List<String>) {
         println("Index: (unknown: ${words.unknowns()})")
         words.forEach(::println)
