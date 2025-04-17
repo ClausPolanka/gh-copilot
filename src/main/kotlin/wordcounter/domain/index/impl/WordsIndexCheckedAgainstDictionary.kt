@@ -4,7 +4,7 @@ import wordcounter.domain.index.api.*
 
 private const val UNKNOWN_MARK = "*"
 
-class DictionaryCheckedWordsIndex(
+class WordsIndexCheckedAgainstDictionary(
     private val wordsIndexListener: WordsIndexListener,
     private val dictionary: List<String>,
 ) : WordsIndexListener {

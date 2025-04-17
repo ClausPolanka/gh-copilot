@@ -20,7 +20,7 @@ class WordsIndices {
             errorReporter = ::println
         )
         return WordsIndex(
-            wordsIndexListener = DictionaryCheckedWordsIndex(
+            wordsIndexListener = WordsIndexCheckedAgainstDictionary(
                 wordsIndexListener = ConsoleWordsIndexPrinterCheckedAgainstDictionary(),
                 dictionary = dictionaryFile.readContent(),
             )
