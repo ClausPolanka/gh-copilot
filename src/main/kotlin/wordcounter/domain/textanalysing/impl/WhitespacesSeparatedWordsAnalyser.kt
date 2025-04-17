@@ -7,10 +7,10 @@ class WhitespacesSeparatedWordsAnalyser(
     private val wordsListener: WordsListener,
 ) : TextAnalyser {
     override fun analyse(text: String) {
-        val words = text.analyse()
+        val words = text.splitByWhiteSpaces()
         wordsListener.onWordsAnalysed(words)
     }
 
-    private fun String.analyse(): List<String> =
+    private fun String.splitByWhiteSpaces(): List<String> =
         split("\\s+".toRegex()).filter { it.isNotBlank() }
 }
