@@ -25,7 +25,7 @@ fun wordCounterApplication(options: WordCounterApplicationOptions) =
     WordCounterApplication(
         textAnalyser(
             wordCounterFile = stopWordsFile(),
-            wordCounter = LatinAlphabeticWordCounter(wordCountListener = ConsoleWordCountPrinter()),
+            wordCounter = latinAlphabeticWordCounter(wordCountListener = ConsoleWordCountPrinter()),
             wordsListener = WordsIndices().get(options)
         )
     )
