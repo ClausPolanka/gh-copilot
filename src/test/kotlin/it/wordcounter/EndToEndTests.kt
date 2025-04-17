@@ -14,8 +14,8 @@ class EndToEndTests {
         aUserEnters("Humpty-Dumpty sat on a wall. Humpty-Dumpty had a great fall.")
         main()
         assertEquals(
-            uiOutput(),
-            "The text contains 7 word(s), 6 of them unique. The average word length is ${6.14.format()} characters long."
+            "The text contains 7 word(s), 6 of them unique. The average word length is ${6.14.format()} characters long.",
+            uiOutput()
         )
     }
 
@@ -23,8 +23,8 @@ class EndToEndTests {
     fun `a user provides a file as a user input source`() {
         main(arrayOf("my_text.txt"))
         assertEquals(
-            uiOutput(),
-            "The text contains 4 word(s), 4 of them unique. The average word length is ${4.25.format()} characters long."
+            "The text contains 4 word(s), 4 of them unique. The average word length is ${4.25.format()} characters long.",
+            uiOutput()
         )
     }
 
@@ -33,8 +33,8 @@ class EndToEndTests {
         aUserEnters("Ma3ry")
         main()
         assertEquals(
-            uiOutput(),
-            "The text contains 0 word(s), 0 of them unique. The average word length is ${0.00.format()} characters long."
+            "The text contains 0 word(s), 0 of them unique. The average word length is ${0.00.format()} characters long.",
+            uiOutput()
         )
     }
 
@@ -43,8 +43,8 @@ class EndToEndTests {
         aUserEnters("Mary?")
         main()
         assertEquals(
-            uiOutput(),
-            "The text contains 1 word(s), 1 of them unique. The average word length is ${4.00.format()} characters long."
+            "The text contains 1 word(s), 1 of them unique. The average word length is ${4.00.format()} characters long.",
+            uiOutput()
         )
     }
 
@@ -63,8 +63,8 @@ class EndToEndTests {
         aUserEnters("")
         main()
         assertEquals(
-            uiOutput(),
-            "The text contains 0 word(s), 0 of them unique. The average word length is ${0.00.format()} characters long."
+            "The text contains 0 word(s), 0 of them unique. The average word length is ${0.00.format()} characters long.",
+            uiOutput()
         )
     }
 
@@ -73,8 +73,8 @@ class EndToEndTests {
         aUserEnters("a on the off")
         main()
         assertEquals(
-            uiOutput(),
-            "The text contains 0 word(s), 0 of them unique. The average word length is ${0.00.format()} characters long."
+            "The text contains 0 word(s), 0 of them unique. The average word length is ${0.00.format()} characters long.",
+            uiOutput()
         )
     }
 
@@ -90,7 +90,7 @@ class EndToEndTests {
             .appendLine("little")
             .append("Mary")
             .toString()
-        assertEquals(uiOutput(), expected)
+        assertEquals(expected, uiOutput())
     }
 
     @Test
@@ -105,7 +105,7 @@ class EndToEndTests {
             .appendLine("little")
             .append("Mary*")
             .toString()
-        assertEquals(uiOutput(), expected)
+        assertEquals(expected, uiOutput())
     }
 
     @Test
