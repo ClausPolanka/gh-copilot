@@ -6,11 +6,12 @@ class WordCounter(
     private val wordsFilter: List<(String) -> Boolean> = emptyList(),
     private val wordCountListener: WordCountListener,
 ) : WordsListener {
-    override fun onWordsAnalysed(words: List<String>) {
-        val wordCount = count(words)
-        wordCountListener.onWordsCounted(wordCount)
-    }
+    override fun onWordsAnalysed(words: List<String>) =
+        wordCountListener.onWordsCounted(words.count())
 
-    private fun count(words: List<String>): WordCount =
-        WordCount(words = words.filter { word -> wordsFilter.all { f -> f(word) } })
+    private fun List<String>.count() =
+        WordCount(words = filtered())
+
+    private fun List<String>.filtered(): List<String> =
+        filter { word -> wordsFilter.all { f -> f(word) } }
 }
