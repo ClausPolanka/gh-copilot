@@ -12,5 +12,5 @@ class WordCounter(
     }
 
     private fun count(words: List<String>): WordCount =
-        WordCount(words.filter { word -> wordsFilter.all { f -> f(word) } })
+        WordCount(words = words.filter { word -> wordsFilter.all { f -> f(word) } })
 }
