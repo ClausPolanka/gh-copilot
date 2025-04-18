@@ -1,3 +1,4 @@
+import Yatzy.Companion.fours
 import kotlin.test.*
 
 class YatzyTest {
@@ -40,9 +41,9 @@ class YatzyTest {
 
     @Test
     fun fours_test() {
-        assertEquals(12, Yatzy(4, 4, 4, 5, 5).fours())
-        assertEquals(8, Yatzy(4, 4, 5, 5, 5).fours())
-        assertEquals(4, Yatzy(4, 5, 5, 5, 5).fours())
+        assertEquals(12, fours(4, 4, 4, 5, 5))
+        assertEquals(8, fours(4, 4, 5, 5, 5))
+        assertEquals(4, fours(4, 5, 5, 5, 5))
     }
 
     @Test

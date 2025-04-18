@@ -9,16 +9,6 @@ class Yatzy(d1: Int, d2: Int, d3: Int, d4: Int, _5: Int) {
         dice[4] = _5
     }
 
-    fun fours(): Int {
-        var sum: Int = 0
-        for (at in 0..4) {
-            if (dice[at] == 4) {
-                sum += 4
-            }
-        }
-        return sum
-    }
-
     fun fives(): Int {
         var s = 0
         var i: Int = 0
@@ -224,6 +214,22 @@ class Yatzy(d1: Int, d2: Int, d3: Int, d4: Int, _5: Int) {
                 _2_at * 2 + _3_at * 3
             else
                 0
+        }
+
+        fun fours(d1: Int, d2: Int, d3: Int, d4: Int, d5: Int): Int {
+            var dice: IntArray = IntArray(5)
+            dice[0] = d1
+            dice[1] = d2
+            dice[2] = d3
+            dice[3] = d4
+            dice[4] = d5
+            var sum: Int = 0
+            for (at in 0..4) {
+                if (dice[at] == 4) {
+                    sum += 4
+                }
+            }
+            return sum
         }
     }
 }
