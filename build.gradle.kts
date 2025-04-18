@@ -1,5 +1,5 @@
 plugins {
-    id("org.jetbrains.kotlin.jvm") version "2.1.20"
+    id("org.jetbrains.kotlin.jvm") version "2.2.0-Beta1"
     id("com.github.ben-manes.versions") version "0.52.0"
     idea
 }
