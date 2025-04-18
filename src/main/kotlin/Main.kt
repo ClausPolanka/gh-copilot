@@ -24,16 +24,15 @@ fun main() {
 }
 
 fun Application.configureSecurity() {
-    // Install Sessions
+    // Install Sessions (Same as before)
     install(Sessions) {
         cookie<UserSession>("user_session") {
             cookie.path = "/"
             cookie.maxAgeInSeconds = 60 * 60 // 1 hour
             // In a real app, use a secure secret key and possibly encryption/signing
-            // transform(SessionTransportTransformerEncrypt(hex("00112233445566778899aabbccddeeff"), hex("aabbccddeeff0011223344556677")))
         }
     }
-    // Install Authentication
+    // Install Authentication (Same as before)
     install(Authentication) {
         form("auth-form") {
             userParamName = "username"
@@ -43,24 +42,21 @@ fun Application.configureSecurity() {
                 val password = credentials.password
                 val foundUser = users.values.find { it.username == username }
                 if (foundUser != null && userCredentials[username] == password) {
-                    UserIdPrincipal(foundUser.id.toString()) // Use UserIdPrincipal for validation phase
+                    UserIdPrincipal(foundUser.id.toString())
                 } else {
                     null
                 }
             }
             challenge {
-                // Redirect to login page on challenge
                 call.respondRedirect("/login?error=invalid")
             }
         }
 
         session<UserSession>("auth-session") {
             validate { session ->
-                // Check if user ID from session exists
                 if (users.containsKey(session.userId)) session else null
             }
             challenge {
-                // Redirect to login page if session is invalid or missing
                 call.respondRedirect("/login")
             }
         }
@@ -69,13 +65,12 @@ fun Application.configureSecurity() {
 
 fun Application.configureRouting() {
     routing {
-        // Login page (GET)
+        // Login page (GET) - (Mostly the same, just updated title)
         get("/login") {
             val error = call.request.queryParameters["error"]
             call.respondHtml {
                 head {
-                    title("Login")
-                    // Basic styling using Bootstrap CDN for visual appeal
+                    title("Login - Vulnerable App")
                     link(
                         rel = "stylesheet",
                         href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
@@ -89,19 +84,13 @@ fun Application.configureRouting() {
                         }
                         form(action = "/login", method = FormMethod.post, classes = "needs-validation") {
                             div(classes = "mb-3") {
-                                label(classes = "form-label") {
-                                    htmlFor = "username"
-                                    +"Username"
-                                }
+                                label(classes = "form-label") { htmlFor = "username"; +"Username" }
                                 textInput(name = "username", classes = "form-control") {
                                     id = "username"; required = true
                                 }
                             }
                             div(classes = "mb-3") {
-                                label(classes = "form-label") {
-                                    htmlFor = "password"
-                                    +"Password"
-                                }
+                                label(classes = "form-label") { htmlFor = "password"; +"Password" }
                                 passwordInput(name = "password", classes = "form-control") {
                                     id = "password"; required = true
                                 }
@@ -112,36 +101,86 @@ fun Application.configureRouting() {
                 }
             }
         }
-        // Login action (POST) - Protected by form authentication
+        // Login action (POST) - Redirect to dashboard
         authenticate("auth-form") {
             post("/login") {
                 val principal = call.principal<UserIdPrincipal>()
                 if (principal != null) {
                     val userId = principal.name.toInt()
-                    // Set the session cookie upon successful login
                     call.sessions.set(UserSession(userId = userId))
-                    // Redirect to the user's own profile page
-                    call.respondRedirect("/profile/$userId")
+                    // --- CHANGE: Redirect to dashboard instead of profile ---
+                    call.respondRedirect("/dashboard")
                 } else {
-                    // Should not happen if validation works, but handle just in case
                     call.respondRedirect("/login?error=unknown")
                 }
             }
         }
-        // Logout action
+        // Logout action (Same as before)
         get("/logout") {
             call.sessions.clear<UserSession>()
             call.respondRedirect("/login")
         }
-        // Profile page - Protected by session authentication
+        // --- NEW: Dashboard page ---
         authenticate("auth-session") {
-            get("/profile/{id}") {
+            get("/dashboard") {
+                val userSession = call.principal<UserSession>()!!
+                val currentUser = users[userSession.userId]
+
+                call.respondHtml {
+                    head {
+                        title("Dashboard")
+                        link(
+                            rel = "stylesheet",
+                            href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+                        )
+                    }
+                    body {
+                        div(classes = "container mt-5") {
+                            h2 { +"Dashboard" }
+                            if (currentUser != null) {
+                                p { +"Welcome, ${currentUser.username}!" }
+                            } else {
+                                p { +"Welcome!" } // Should not happen if session is valid
+                            }
+                            hr {}
+                            h3 { +"View Profile" }
+                            // Form to view the user's OWN profile (using hidden input or just pre-filled)
+                            form(action = "/profile", method = FormMethod.get) {
+                                // We use a hidden field here. An attacker could change this value
+                                // using browser developer tools before submitting the form.
+                                hiddenInput(name = "uid") { value = userSession.userId.toString() }
+                                button(type = ButtonType.submit, classes = "btn btn-primary") { +"View My Profile" }
+                            }
+                            // Add a direct link/button to demonstrate the exploit easily
+                            if (currentUser != null) {
+                                val otherUserId = if (currentUser.id == 1) 2 else 1
+                                val otherUsername = users[otherUserId]?.username ?: "Other User"
+                                div(classes = "mt-3") {
+                                    p { +"Try accessing another profile directly:" }
+                                    // This link directly exposes the vulnerable parameter in the URL
+                                    a(
+                                        href = "/profile?uid=$otherUserId",
+                                        classes = "btn btn-warning"
+                                    ) { +"Attempt to View $otherUsername's Profile (ID: $otherUserId)" }
+                                }
+                            }
+                            hr {}
+                            p { a(href = "/logout", classes = "btn btn-secondary mt-3") { +"Logout" } }
+                        }
+                    }
+                }
+            }
+        }
+        // Profile page - Accessed via query parameter `uid`
+        authenticate("auth-session") {
+            // --- CHANGE: Route path and parameter access ---
+            get("/profile") { // Changed from /profile/{id}
                 // --- VULNERABILITY HERE ---
-                // It retrieves the user ID from the URL path parameter...
-                val requestedUserId = call.parameters["id"]?.toIntOrNull()
+                // It retrieves the user ID from the query parameter 'uid'...
+                val requestedUserId = call.request.queryParameters["uid"]?.toIntOrNull()
                 // ...and uses it directly without checking if the logged-in user
                 // (from the session) is authorized to view this profile.
-                val userSession = call.principal<UserSession>()!! // Assumes session is valid due to authenticate block
+                val userSession = call.principal<UserSession>()!!
                 val userToShow = if (requestedUserId != null) users[requestedUserId] else null
 
                 if (userToShow != null) {
@@ -157,7 +196,7 @@ fun Application.configureRouting() {
                             div(classes = "container mt-5") {
                                 h2 { +"Profile Page" }
                                 hr {}
-                                p { strong { +"Viewing Profile ID:" }; +" $requestedUserId" }
+                                p { strong { +"Viewing Profile for User ID (from uid parameter):" }; +" $requestedUserId" }
                                 p { strong { +"Logged in as User ID:" }; +" ${userSession.userId} (${users[userSession.userId]?.username ?: "Unknown"})" }
                                 hr {}
                                 h3 { +"User Details" }
@@ -166,31 +205,34 @@ fun Application.configureRouting() {
                                 p { strong { +"Secret Info:" }; i(classes = "text-danger") { +" ${userToShow.secretInfo}" }; +" (This should be protected!)" }
                                 hr {}
                                 p {
-                                    a(href = "/logout", classes = "btn btn-secondary") { +"Logout" }
-                                    // Link to potentially view the *other* user's profile (if logged in as alice)
-                                    if (userSession.userId == 1) { // Example: Alice is user 1
-                                        +" "
-                                        a(
-                                            href = "/profile/2",
-                                            classes = "btn btn-warning ms-2"
-                                        ) { +"Try viewing Bob's profile (ID 2)" }
-                                    } else if (userSession.userId == 2) { // Example: Bob is user 2
-                                        +" "
-                                        a(
-                                            href = "/profile/1",
-                                            classes = "btn btn-warning ms-2"
-                                        ) { +"Try viewing Alice's profile (ID 1)" }
-                                    }
+                                    a(href = "/dashboard", classes = "btn btn-secondary") { +"Back to Dashboard" }
+                                    +" "
+                                    a(href = "/logout", classes = "btn btn-danger ms-2") { +"Logout" }
                                 }
                             }
                         }
                     }
                 } else {
-                    call.respond(HttpStatusCode.NotFound, "User not found")
+                    call.respondHtml(HttpStatusCode.NotFound) {
+                        head {
+                            title("Not Found")
+                            link(
+                                rel = "stylesheet",
+                                href = "https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css"
+                            )
+                        }
+                        body {
+                            div(classes = "container mt-5") {
+                                h2 { +"User Not Found" }
+                                p { +"The requested user ID ($requestedUserId) does not exist." }
+                                a(href = "/dashboard", classes = "btn btn-secondary mt-3") { +"Back to Dashboard" }
+                            }
+                        }
+                    }
                 }
             }
         }
-        // Redirect root to login
+        // Redirect root to login (Same as before)
         get("/") {
             call.respondRedirect("/login")
         }
