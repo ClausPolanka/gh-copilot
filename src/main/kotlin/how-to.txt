@@ -1,0 +1,7 @@
+1. private -> public (all classes)
+2. Extract Super Class
+3. Pull members up
+3.1 Refactor anyway
+4. Fix compile errors
+4.1 F2 / F1
+4.2 Delete Method
