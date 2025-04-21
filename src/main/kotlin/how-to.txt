@@ -1,3 +1,4 @@
+Pull members up
 1. private -> public (all classes)
 2. Extract Super Class
 3. Pull members up
@@ -5,3 +6,8 @@
 4. Fix compile errors
 4.1 F2 / F1
 4.2 Delete Method
+
+Extract Function to Scope
+1. Select code block
+2. Extract Function to Scope
+3. File scope (extracts extension function)
