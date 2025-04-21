@@ -17,8 +17,5 @@ open class Super {
     }
 }
 
-class Impl : Super() {
-}
-
-class Impl2 : Super() {
-}
+class Impl : Super()
+class Impl2 : Super()
